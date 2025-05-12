@@ -49,3 +49,4 @@ next-env.d.ts
 /dataSources.local.xml
 
 *.idea*
+/src/generated
