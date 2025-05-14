@@ -1,12 +1,12 @@
 import Image from "next/image";
-import HeaderMain from "../components/HeaderMain"
+import Header from "@/components/Header"
 import EventCard from "@/components/EventCard";
 export default function Home() {
   return (
     <div>
         <main>
             <nav className="h-6/8 bg-[url(/landing_background.jpeg)] bg-cover bg-[position:0_-20em] pb-20">
-                <HeaderMain/>
+                <Header/>
                 <div className="pl-20">
                     <h1 className="mt-40 text-white text-9xl w-3/5">Solo i migliori eventi in romagna</h1>
                     <h3 className="text-white text-2xl w-3/5">Scopri tutti i prossimi eventi ed esperienze che questa terra ha da offrire</h3>
