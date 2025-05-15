@@ -4,6 +4,7 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  --backgroundDetail: #D2DDEB;
   --button_blue: #004AAD;
   --button_orange: #FF914D;
   --grey: #545454;
@@ -15,6 +16,13 @@
   --button_orange: var(--button_orange);
   --grey: var(--grey);
   --red-date: var(--red-date);
+  --backgroundDetail: var(--backgroundDetail);
+}
+
+.bg-special{
+  background: var(--backgroundDetail);
+  min-height: 100vh;
+  margin: 0;
 }
 
 body {

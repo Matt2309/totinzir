@@ -19,6 +19,11 @@ export default function Home() {
 
                 <div className="grid grid-cols-3 gap-x-25 gap-y-15 mt-10 mb-10">
                     <EventCard category={'Intrattenimento'} dayName={'GIO'} dayNum={10} time={'7:00 PM'} city={'Rimini'} title={'Festa pazzesca'}/>
+                    <EventCard category={'Intrattenimento'} dayName={'GIO'} dayNum={10} time={'7:00 PM'} city={'Rimini'} title={'Festa pazzesca'}/>
+                    <EventCard category={'Intrattenimento'} dayName={'GIO'} dayNum={10} time={'7:00 PM'} city={'Rimini'} title={'Festa pazzesca'}/>
+                    <EventCard category={'Intrattenimento'} dayName={'GIO'} dayNum={10} time={'7:00 PM'} city={'Rimini'} title={'Festa pazzesca'}/>
+                    <EventCard category={'Intrattenimento'} dayName={'GIO'} dayNum={10} time={'7:00 PM'} city={'Rimini'} title={'Festa pazzesca'}/>
+
                 </div>
             </div>
         </main>

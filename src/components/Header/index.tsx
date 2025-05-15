@@ -1,9 +1,12 @@
 import Image from "next/image";
+import Link from "next/link";
 
-export default function HeaderMain() {
+export default function Header() {
   return (
-      <div className="pl-20 pr-20 pt-2 flex justify-between items-center pb-1 w-full bg-gradient-to-b from-black/50 to-transparent pointer-events-none">
-          <Image src="/logo_small_totinzir.svg" alt="header logo" width={100} height={66}></Image>
+      <div className="pl-20 pr-20 pt-2 flex justify-between items-center pb-1 w-full bg-[light-dark(var(--button_blue),var(--button_blue))] pointer-events-none">
+          <Link href="/" className="pointer-events-auto">
+              <Image src="/logo_small_totinzir.svg" alt="header logo" width={100} height={66}/>
+          </Link>
           <div className="flex gap-30 text-white">
               <label>HOME</label>
               <label>CHI SIAMO</label>
@@ -18,7 +21,6 @@ export default function HeaderMain() {
                   AREA RISERVATA
               </button>
           </div>
-
       </div>
   );
 }
