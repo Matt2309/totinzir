@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 
 export default function login() {
   return (
@@ -6,7 +7,9 @@ export default function login() {
         <main className="flex flex-col items-center">
             <div className="grid grid-cols-2 bg-white w-4/6 my-30 h-150 rounded-3xl">
                 <div className="p-10">
-                    <Image src="/logo_totinzir.svg" alt="header logo" width={70} height={40}></Image>
+                    <Link href="/" className="pointer-events-auto">
+                        <Image src="/logo_totinzir.svg" alt="header logo" width={70} height={40}></Image>
+                    </Link>
                     <br/>
                     <h1 className="text-4xl">BENVENUTO</h1>
                     <form className="flex flex-col gap-2">

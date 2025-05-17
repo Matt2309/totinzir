@@ -11,8 +11,8 @@ export default function HeaderMain() {
               <label>EVENTI</label>
           </div>
           <div className="flex gap-10 text-white">
-              <button className="bg-[light-dark(var(--button_blue),var(--button_blue))] font-bold py-1 px-5 rounded-full">
-                  REGISTRATI
+              <button className="bg-[light-dark(var(--button_blue),var(--button_blue))] font-bold py-1 px-10 rounded-full">
+                  LOGIN
               </button>
               <button className="bg-[light-dark(var(--button_orange),var(--button_orange))] font-bold py-1 px-5 rounded-full">
                   AREA RISERVATA
