@@ -28,6 +28,9 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         {children}
+        <footer className="bg-[light-dark(var(--button_blue),var(--button_blue))] text-white p-4 flex justify-center">
+            COPYRIGHT 2025 - MULARONI MATTIA
+        </footer>
       </body>
     </html>
   );

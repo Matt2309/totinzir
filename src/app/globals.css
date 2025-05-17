@@ -19,8 +19,14 @@
   --backgroundDetail: var(--backgroundDetail);
 }
 
-.bg-special{
+.bg-detail{
   background: var(--backgroundDetail);
+  min-height: 100vh;
+  margin: 0;
+}
+
+.bg-login{
+  background: linear-gradient(-200deg, var(--button_blue) 40%, var(--button_orange)) 40%;
   min-height: 100vh;
   margin: 0;
 }
@@ -38,4 +44,8 @@ h1{
 
 .date{
   font-family: "Bree serif", sans-serif;
+}
+
+input{
+  font-family: "Roboto Light", sans-serif;
 }

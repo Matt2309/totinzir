@@ -77,9 +77,6 @@ export default function EventDetail() {
                 </div>
             </nav>
         </main>
-        <footer className="bg-[light-dark(var(--button_blue),var(--button_blue))] text-white p-4 flex justify-center">
-            COPYRIGHT 2025 - MULARONI MATTIA
-        </footer>
     </div>
   );
 }

@@ -23,13 +23,9 @@ export default function Home() {
                     <EventCard category={'Intrattenimento'} dayName={'GIO'} dayNum={10} time={'7:00 PM'} city={'Rimini'} title={'Festa pazzesca'}/>
                     <EventCard category={'Intrattenimento'} dayName={'GIO'} dayNum={10} time={'7:00 PM'} city={'Rimini'} title={'Festa pazzesca'}/>
                     <EventCard category={'Intrattenimento'} dayName={'GIO'} dayNum={10} time={'7:00 PM'} city={'Rimini'} title={'Festa pazzesca'}/>
-
                 </div>
             </div>
         </main>
-        <footer className="bg-[light-dark(var(--button_blue),var(--button_blue))] text-white p-4 flex justify-center">
-            COPYRIGHT 2025 - MULARONI MATTIA
-        </footer>
     </div>
   );
 }
