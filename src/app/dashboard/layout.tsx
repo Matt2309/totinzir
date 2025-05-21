@@ -15,7 +15,7 @@ export default function SpecialLayoutDashboard({ children }: { children: React.R
                 <HeaderDashboard />
 
                 {/* Contenuto dinamico della pagina */}
-                <main className="p-4 pt-[6rem]">
+                <main className="pt-30 pl-15">
                     {children}
                 </main>
             </div>

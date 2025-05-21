@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Bree+Serif&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Big+Shoulders+Inline&family=Bree+Serif&display=swap');
 @import "tailwindcss";
 
 :root {
@@ -48,6 +48,24 @@ h1{
 
 input{
   font-family: "Roboto Light", sans-serif;
+}
+
+.dashboard-title{
+  font-family: "Big Shoulders Inline", sans-serif;
+  font-size: 2em;
+  font-optical-sizing: auto;
+  font-weight: bold;
+  font-style: normal;
+  color: #545454;
+}
+
+.card-label{
+  font-family: "Big Shoulders Inline", sans-serif;
+  font-size: 1rem;
+  font-optical-sizing: auto;
+  font-weight: 600;
+  font-style: normal;
+  color: #545454;
 }
 
 .sidebar-item {
