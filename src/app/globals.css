@@ -49,3 +49,11 @@ h1{
 input{
   font-family: "Roboto Light", sans-serif;
 }
+
+.sidebar-item {
+  transition: background 0.2s;
+}
+
+.sidebar-item.active {
+  background-color: #00367e;
+}
