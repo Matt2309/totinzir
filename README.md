@@ -4,7 +4,7 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
 
 First, init prisma:
 ```bash
-npx prisma migrate dev
+npx prisma generate
 ```
 
 Run the development server:

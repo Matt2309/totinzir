@@ -14,12 +14,244 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Evento {
-  id        Int      @id @unique @default(autoincrement())
+model Review {
+  id          Int     @id @default(autoincrement())
+  title       String
+  purchased   Boolean
+  description String
+  stars       Int
+  user        User    @relation(fields: [userId], references: [id])
+  userId      Int
+}
+
+model PaymentMethod {
+  id         Int      @id @default(autoincrement())
+  user       User     @relation(fields: [userId], references: [id])
+  userId     Int      @unique
+  cardNumber String
+  expiryDate DateTime
+  cvv        String
+}
+
+model User {
+  id            Int            @id @default(autoincrement())
+  email         String         @unique
+  password      String
+  phone         String?
+  role          Role           @relation(fields: [roleId], references: [id])
+  roleId        Int
+  fiscalCode    String?        @unique
+  paymentMethod PaymentMethod?
+  reviews       Review[]
+  transactions  Transaction[]
+  address       Address?
+  manager       Manager?
+  Registry      Registry[]
+}
+
+model Transaction {
+  id        Int        @id @default(autoincrement())
+  date      DateTime
+  amount    Float
+  status    String
+  user      User       @relation(fields: [userId], references: [id])
+  userId    Int
+  operation Operation?
+}
+
+model Registry {
+  fiscalCode String @id
+  age        Int
+  firstName  String
+  lastName   String
+  policy     String
+  user       User?  @relation(fields: [fiscalCode], references: [fiscalCode])
+}
+
+model EventHistory {
+  id          Int      @id @default(autoincrement())
+  title       String
+  startDate   DateTime
+  endDate     DateTime
+  location    String
+  status      String
+  coordinates String
+  image       String
+  description String
+  revenue     Float
+  ticketsSold Int
+}
+
+model Manager {
+  id          Int    @id @default(autoincrement())
+  companyName String
+  vatNumber   String
+  user        User   @relation(fields: [userId], references: [id])
+  userId      Int    @unique
+}
+
+model Operation {
+  transaction   Transaction @relation(fields: [transactionId], references: [id])
+  transactionId Int         @id
+  order         Order       @relation(fields: [orderId], references: [id])
+  orderId       Int         @unique
+}
+
+model Role {
+  id    Int    @id @default(autoincrement())
+  title String
+  users User[]
+}
+
+model Order {
+  id        Int        @id @default(autoincrement())
+  total     Float
+  date      DateTime
+  operation Operation?
+  tickets   Ticket[]
+}
+
+model Sponsor {
+  id           Int            @id @default(autoincrement())
+  name         String
+  contact      String
+  daysCount    Int
+  budget       Float
+  logo         String
+  type         String
+  codes        DiscountCode[]
+  sponsorships Sponsorship[]
+}
+
+model Sponsorship {
+  event     Event   @relation(fields: [eventId], references: [id])
+  eventId   Int
+  sponsor   Sponsor @relation(fields: [sponsorId], references: [id])
+  sponsorId Int
+
+  @@id([eventId, sponsorId])
+}
+
+model Address {
+  id       Int     @id @default(autoincrement())
+  user     User    @relation(fields: [userId], references: [id])
+  userId   Int     @unique
+  street   String
+  zip      String
+  country  String
+  province String
+  city     String
+  Event    Event[]
+}
+
+model Newsletter {
+  id         Int      @id @default(autoincrement())
+  email      String
+  signUpDate DateTime
+  event      Event?   @relation(fields: [eventId], references: [id])
+  eventId    Int?
+}
+
+model DiscountCode {
+  code      String  @id
+  name      String
+  sponsor   Sponsor @relation(fields: [sponsorId], references: [id])
+  sponsorId Int
+  event     Event   @relation(fields: [eventId], references: [id])
+  eventId   Int
+}
+
+model Event {
+  id           Int            @id @default(autoincrement())
+  title        String
+  startDate    DateTime
+  endDate      DateTime
+  location     String
+  status       String
+  coordinates  String
+  image        String
+  description  String
+  type         String
+  topic        String?
+  guideName    String?
+  guideNumber  String?
+  address      Address?       @relation(fields: [addressId], references: [id])
+  addressId    Int?
+  ticketTypes  TicketType[]
+  categories   Category[]
+  activities   Activity[]
+  sponsorships Sponsorship[]
+  Newsletter   Newsletter[]
+  DiscountCode DiscountCode[]
+  Exhibition   Exhibition[]
+}
+
+model Exhibition {
+  stand   Stand @relation(fields: [standId], references: [id])
+  standId Int
+  event   Event @relation(fields: [eventId], references: [id])
+  eventId Int
+
+  @@id([standId, eventId])
+}
+
+model Stand {
+  id          Int          @id @default(autoincrement())
+  name        String
+  logo        String
+  position    String
+  origin      String
+  type        StandType    @relation(fields: [typeId], references: [id])
+  typeId      Int
+  exhibitions Exhibition[]
+}
+
+model StandType {
+  id     Int     @id @default(autoincrement())
+  title  String
+  size   String
+  stands Stand[]
+}
+
+model Ticket {
+  id           Int        @id @default(autoincrement())
+  firstName    String
+  lastName     String
+  format       String
+  commission   Float
+  order        Order      @relation(fields: [orderId], references: [id])
+  orderId      Int
+  ticketType   TicketType @relation(fields: [ticketTypeId], references: [id])
+  ticketTypeId Int
+}
+
+model TicketType {
+  id        Int      @id @default(autoincrement())
   title     String
-  desc      String
-  initDate  DateTime
-  location  String
-  state     String
-  imagePath String
+  maxAge    Int?
+  minAge    Int?
+  price     Float
+  startDate DateTime
+  endDate   DateTime
+  event     Event    @relation(fields: [eventId], references: [id])
+  eventId   Int
+  tickets   Ticket[]
+}
+
+model Category {
+  id         Int    @id @default(autoincrement())
+  title      String
+  difficulty String
+  duration   Int
+  event      Event  @relation(fields: [eventId], references: [id])
+  eventId    Int
+}
+
+model Activity {
+  id      Int      @id @default(autoincrement())
+  date    DateTime
+  time    String
+  title   String
+  event   Event    @relation(fields: [eventId], references: [id])
+  eventId Int
 }
