@@ -255,3 +255,11 @@ model Activity {
   event   Event    @relation(fields: [eventId], references: [id])
   eventId Int
 }
+
+model Session {
+  id        Int      @id @default(autoincrement())
+  userId    Int      @unique
+  expiresAt DateTime @default(now())
+
+  @@map("sessions")
+}
