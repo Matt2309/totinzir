@@ -4,13 +4,15 @@ import Sidebar from "@/components/Sidebar";
 import HeaderDashboard from "@/components/HeaderDashboard";
 import {verifySession} from "@/lib/dal";
 import {redirect} from "next/navigation";
+import User from "@/db/models/User";
 
 export default async function SpecialLayoutDashboard({ children }: { children: React.ReactNode }) {
     const session = await verifySession();
     const user = session?.userId;
-    if (!user) {
-        redirect('/login')
-    }else {
+    const role = await User.getRole(user);
+    const titleRole = role.title;
+
+    if (user && (titleRole === 'admin' || titleRole === 'manager')) {
         return (
             <div className="flex h-screen overflow-hidden bg-detail">
                 {/* Sidebar fissa */}
@@ -28,5 +30,7 @@ export default async function SpecialLayoutDashboard({ children }: { children: R
                 </div>
             </div>
         );
+    }else {
+        redirect('/login')
     }
 }

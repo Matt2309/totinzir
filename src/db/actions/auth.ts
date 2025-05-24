@@ -2,9 +2,8 @@
 import {SignInFormSchema, SignUpFormSchema, SigninFormState, SignupFormState} from '@/lib/definitions';
 import {redirect} from "next/navigation";
 import {createSession, deleteSession} from "@/lib/sessions";
-import bcrypt, {hash} from "bcrypt";
-import { prisma } from '@/lib/prisma'
-
+import bcrypt from "bcrypt";
+import User from "@/db/models/User";
 
 export async function signIn(state: SigninFormState, formData: FormData) {
     let redirectLink;
@@ -14,18 +13,20 @@ export async function signIn(state: SigninFormState, formData: FormData) {
 
         await SignInFormSchema.validate({ email, password }, { abortEarly: false });
 
-        const user = await prisma.user.findUnique({ where: { email } });
-        if (!user) {
-            return { message: "Invalid username or password" };
+        const user = await User.findByEmail(email);
+        const match = user && await bcrypt.compare(password, user.password);
+
+        if (!user || !match) {
+            return {
+                errors: {
+                    genericerror: ["Email o password non validi"],
+                },
+            };
         }
-        const match = await bcrypt.compare(password, user.password);
-        if (!match) {
-            console.log("Login failed: ");
-            return { message: "Invalid username or password" };
-        }else {
-            await createSession(user.id);
-            redirectLink = '/';
-        }
+
+        await createSession(user.id);
+        redirectLink = '/';
+
     } catch (error: any) {
         if (error?.name === "ValidationError") {
             const errors: Record<string, string[]> = {};
@@ -45,12 +46,13 @@ export async function signIn(state: SigninFormState, formData: FormData) {
                 genericerror: ["Errore durante il login. Riprova più tardi."],
             },
         };
-    }finally {
+    } finally {
         if (redirectLink) {
             redirect(redirectLink);
         }
     }
 }
+
 
 export async function signUp(state: SignupFormState, formData: FormData) {
     let redirectLink;
@@ -67,22 +69,15 @@ export async function signUp(state: SignupFormState, formData: FormData) {
         console.log("policy: ", policy)
 
         await SignUpFormSchema.validate({ firstname, lastname, phone, age, fc, email, password, policy }, { abortEarly: false });
-
-        await prisma.registry.create({
-            data: {
-                fiscalCode: fc,
-                age: Number(age),
-                firstName: firstname,
-                lastName: lastname,
-                policy: policy,
-                user: { create: {
-                        email: email,
-                        phone: phone,
-                        password: await hash(password, 8),
-                        fiscalCode: fc,
-                        role: { connect: { title: "visitor" } }, // solo se title è @unique
-                    }},
-            },
+        await User.add({
+            fc: fc,
+            age: age,
+            firstname: firstname,
+            lastname: lastname,
+            policy: policy,
+            email: email,
+            phone: phone,
+            password:password
         });
         redirectLink = '/login';
     } catch (error: any) {
