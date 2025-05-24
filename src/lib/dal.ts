@@ -1,4 +1,3 @@
-'use client'
 import {getSession} from './sessions'
 import {cache} from "react";
 

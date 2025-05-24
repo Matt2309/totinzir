@@ -60,12 +60,14 @@ model Transaction {
 }
 
 model Registry {
-  fiscalCode String @id
+  id         Int    @id @default(autoincrement())
+  userId     Int
+  fiscalCode String @unique
   age        Int
   firstName  String
   lastName   String
   policy     String
-  user       User?  @relation(fields: [fiscalCode], references: [fiscalCode])
+  user       User?  @relation(fields: [userId], references: [id])
 }
 
 model EventHistory {
@@ -99,7 +101,7 @@ model Operation {
 
 model Role {
   id    Int    @id @default(autoincrement())
-  title String
+  title String @unique
   users User[]
 }
 
