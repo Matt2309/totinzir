@@ -1,4 +1,4 @@
-import Header from "@/components/Header";
+import Header from "../../components/Headers/Header";
 import ResumeLine from "@/components/ResumeLine";
 
 export default function checkout() {

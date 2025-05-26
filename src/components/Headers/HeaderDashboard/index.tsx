@@ -1,7 +1,15 @@
+'use client'
+import {logout} from "@/db/actions/auth";
+import {useRouter} from "next/navigation";
 
 export default function HeaderDashboard() {
+    const router = useRouter()
+    const handleClick = async () => {
+        await logout();
+        router.push('/');
+    };
   return (
-      <div className="p-6 flex justify-around items-center bg-white pointer-events-none top-0 fixed right-0 left-64">
+      <div className="p-6 flex justify-around items-center bg-white top-0 fixed right-0 left-64">
           <div className="w-150">
               <label htmlFor="default-search" className="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">Search</label>
               <div className="relative">
@@ -10,11 +18,13 @@ export default function HeaderDashboard() {
                           <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
                       </svg>
                   </div>
-                  <input type="search" id="default-search" className="block w-full p-2.5 ps-10 text-sm text-gray-900 rounded-xl focus:ring-blue-500 focus:border-blue-500 bg-[light-dark(var(--backgroundDetail),var(--backgroundDetail))]" placeholder="Cerca eventi, biglietti, ecc..." required />
+                  <input type="search" id="default-search" className="block w-full p-2.5 ps-10 text-sm text-gray-900 rounded-xl focus:ring-blue-500 focus:border-blue-500 bg-[light-dark(var(--backgroundTable),var(--backgroundTable))]" placeholder="Cerca eventi, biglietti, ecc..." required />
               </div>
           </div>
           <div className="text-white">
-              <button className="bg-[light-dark(var(--button_orange),var(--button_orange))] font-bold py-1 px-7 rounded-md">
+              <button className="bg-[light-dark(var(--button_orange),var(--button_orange))] font-bold py-1 px-7 rounded-md cursor-pointer"
+                      onClick={handleClick}
+              >
                   LOGOUT
               </button>
           </div>

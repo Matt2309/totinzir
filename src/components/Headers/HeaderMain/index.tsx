@@ -1,5 +1,5 @@
 import { getSession } from '@/lib/sessions';
-import HeaderClient from '@/components/HeaderMainClient';
+import HeaderClient from '../HeaderMainClient';
 
 export default async function HeaderMain() {
     const session = await getSession();

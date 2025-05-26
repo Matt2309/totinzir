@@ -5,6 +5,7 @@
   --background: #ffffff;
   --foreground: #171717;
   --backgroundDetail: #D2DDEB;
+  --backgroundTable: #C0D0E5;
   --button_blue: #004AAD;
   --button_orange: #FF914D;
   --grey: #545454;
@@ -17,6 +18,7 @@
   --grey: var(--grey);
   --red-date: var(--red-date);
   --backgroundDetail: var(--backgroundDetail);
+  --backgroundTable: var(--backgroundTable);
 }
 
 .bg-detail{
@@ -68,10 +70,19 @@ input{
   color: #545454;
 }
 
+.datatable{
+  font-family: "Roboto Medium", sans-serif;
+}
+
 .sidebar-item {
   transition: background 0.2s;
 }
 
 .sidebar-item.active {
   background-color: #00367e;
+}
+
+.dialog {
+  font-family: "Big Shoulders Inline", sans-serif;
+  font-weight: 600;
 }

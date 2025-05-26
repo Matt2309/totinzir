@@ -12,6 +12,7 @@
     "seed": "tsx prisma/seed.ts"
   },
   "dependencies": {
+    "@material-tailwind/react": "^2.1.10",
     "@prisma/client": "^6.8.2",
     "@prisma/engines": "^6.8.2",
     "@prisma/extension-accelerate": "^2.0.0",

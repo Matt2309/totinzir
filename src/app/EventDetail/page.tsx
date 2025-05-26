@@ -1,5 +1,5 @@
 import Image from "next/image";
-import Header from "../../components/Header"
+import Header from "../../components/Headers/Header"
 import ActivityCard from "@/components/ActivityCard";
 import TicketCard from "@/components/TicketCard";
 

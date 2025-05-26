@@ -1,5 +1,5 @@
 import Image from "next/image";
-import HeaderMain from "../components/HeaderMain"
+import HeaderMain from "../components/Headers/HeaderMain"
 import EventCard from "@/components/EventCard";
 export default function Home() {
   return (

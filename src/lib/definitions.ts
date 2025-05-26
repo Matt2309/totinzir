@@ -1,5 +1,4 @@
 import * as yup from 'yup';
-
 export const SignInFormSchema = yup.object({
     email: yup
         .string()
@@ -45,6 +44,70 @@ export const SignUpFormSchema = yup.object().shape({
         .required("Campo obbligatorio"),
 });
 
+
+export const CreateEventSchema = yup.object().shape({
+    title: yup
+        .string()
+        .required('Il titolo è obbligatorio'),
+
+    startDate: yup
+        .date()
+        .typeError('Inserisci una data valida')
+        .required('La data di inizio è obbligatoria'),
+
+    endDate: yup
+        .date()
+        .typeError('Inserisci una data valida')
+        .min(
+            yup.ref('startDate'),
+            'La data di fine deve essere successiva a quella di inizio'
+        )
+        .required('La data di fine è obbligatoria'),
+
+    location: yup
+        .string()
+        .required('Il luogo è obbligatorio'),
+
+    coordinates: yup
+        .string()
+        .matches(
+            /^[-+]?\d+(\.\d+)?,\s*[-+]?\d+(\.\d+)?$/,
+            'Inserisci coordinate valide (es. 41.9028, 12.4964)'
+        )
+        .required('Le coordinate sono obbligatorie'),
+
+    type: yup
+        .string()
+        .oneOf(['Festa', 'Fiera', 'Esperienza'], 'Stato non valido')
+        .required('Lo stato è obbligatorio'),
+
+    image: yup
+        .string()
+        .url('Inserisci un URL valido')
+        .required('Il campo immagine è obbligatorio'),
+
+    topic: yup
+        .string()
+        .optional(),
+
+    guideName: yup
+        .string()
+        .optional(),
+
+    guideNumber: yup
+        .string()
+        .transform((value) => value === '' ? undefined : value)
+        .optional()
+        .matches(
+            /^(\+?\d{1,4}\s?)?(\d{6,15})$/,
+            'Inserisci un numero valido (es. +39 3331234567)'
+        ),
+
+    description: yup
+        .string()
+        .required('La descrizione è obbligatoria'),
+});
+
 export type SigninFormState =
     | {
     errors?: {
@@ -67,6 +130,27 @@ export type SignupFormState =
         email?: string[];
         password?: string[];
         policy?: string[];
+        genericerror?: string[];
+    };
+    message?: string;
+}
+    | undefined;
+
+
+export type CreateEventFormState =
+    | {
+    errors?: {
+        title?: string[];
+        startDate?: string[];
+        endDate?: string[];
+        location?: string[];
+        coordinates?: string[];
+        image?: string[];
+        description?: string[];
+        type?: string[];
+        topic?: string[];
+        guideName?: string[];
+        guideNumber?: string[];
         genericerror?: string[];
     };
     message?: string;

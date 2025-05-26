@@ -16,6 +16,10 @@ export default function HeaderClient({ user }: { user: string | null }) {
         }
     };
 
+    const handleDashboard = async () => {
+        router.push('/dashboard/events');
+    };
+
     return (
         <div className="pl-20 pr-20 pt-2 flex justify-between items-center pb-1 w-full bg-gradient-to-b from-black/50 to-transparent">
             <a href="/"><Image src="/logo_small_totinzir.svg" alt="header logo" width={100} height={66} /></a>
@@ -32,7 +36,10 @@ export default function HeaderClient({ user }: { user: string | null }) {
                 >
                     {user ? "LOGOUT" : "LOGIN"}
                 </button>
-                <button className="bg-[light-dark(var(--button_orange),var(--button_orange))] font-bold py-1 px-5 rounded-full">
+                <button
+                    className="bg-[light-dark(var(--button_orange),var(--button_orange))] font-bold py-1 px-5 rounded-full cursor-pointer"
+                    onClick={handleDashboard}
+                >
                     AREA RISERVATA
                 </button>
             </div>

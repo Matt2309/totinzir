@@ -1,7 +1,7 @@
 // app/special/layout.tsx
 import '@/app/globals.css';
 import Sidebar from "@/components/Sidebar";
-import HeaderDashboard from "@/components/HeaderDashboard";
+import HeaderDashboard from "../../components/Headers/HeaderDashboard";
 import {verifySession} from "@/lib/dal";
 import {redirect} from "next/navigation";
 import User from "@/db/models/User";
@@ -9,6 +9,10 @@ import User from "@/db/models/User";
 export default async function SpecialLayoutDashboard({ children }: { children: React.ReactNode }) {
     const session = await verifySession();
     const user = session?.userId;
+    if (!user) {
+        redirect('/login')
+        return;
+    }
     const role = await User.getRole(user);
     const titleRole = role.title;
 
@@ -24,7 +28,7 @@ export default async function SpecialLayoutDashboard({ children }: { children: R
                     <HeaderDashboard />
 
                     {/* Contenuto dinamico della pagina */}
-                    <main className="pt-30 pl-15">
+                    <main className="pt-30 pl-15 pr-15">
                         {children}
                     </main>
                 </div>

@@ -1,10 +1,9 @@
 "use client"
-import { usePathname, useRouter } from "next/navigation"
+import { usePathname } from "next/navigation"
 import Link from "next/link";
 import Image from "next/image";
 
 export default function Sidebar() {
-    const router = useRouter()
     const pathname = usePathname()
 
     const isActive = (path: string) => pathname === path
