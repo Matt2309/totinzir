@@ -33,8 +33,15 @@ export async function decrypt(token) {
 export async function createSession(userId) {
     const expiresAt = new Date(Date.now() + EXPIRATION_TIME);
 
-    const sessionData = await prisma.session.create({
-        data: { userId, expiresAt },
+    const sessionData = await prisma.session.upsert({
+        where: {userId: userId},
+        update: {
+            expiresAt: expiresAt
+        },
+        create: {
+            userId: userId,
+            expiresAt: expiresAt
+        }
     });
 
     const sessionToken = await encrypt({ sessionId: sessionData.id, expiresAt });
