@@ -7,12 +7,13 @@ type Props = {
     time: string;
     city: string;
     title: string;
+    img: string;
 };
 
-export default function EventCard({category, dayName, dayNum, time, city, title}: Props) {
+export default function EventCard({category, dayName, dayNum, time, city, title, img}: Props) {
   return (
       <div className="line-2">
-          <Image src="/landing_background.jpeg" alt="header logo" width={184} height={200}></Image>
+          <Image src={img} alt="header logo" width={184} height={200}></Image>
           <label className="text-xs text-gray-500">{category}</label>
           <div className="flex gap-5">
               <div className="flex flex-col items-center leading-none">

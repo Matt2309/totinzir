@@ -1,9 +1,25 @@
+'use client'
 import { getSession } from '@/lib/sessions';
 import HeaderClient from '../HeaderMainClient';
+import {useEffect, useState} from "react";
 
-export default async function HeaderMain() {
-    const session = await getSession();
-    const user = session?.userId;
+const fetchSession = async (): Promise<any> => {
+    try {
+        const session = await getSession();
+        return session?.userId;
+    } catch (error) {
+        console.error(`Errore nel recupero eventi`, error);
+        return null;
+    }
+};
 
-    return <HeaderClient user={user} />;
+export default function HeaderMain() {
+    const [session, setSession] = useState(null);
+    useEffect(() => {
+        fetchSession().then(res => {
+            setSession(res);
+        });
+    }, []);
+
+    return <HeaderClient user={session}/>;
 }
