@@ -5,6 +5,7 @@ import Event from "@/db/models/Event";
 import {redirect} from "next/navigation";
 
 export async function createEvent(state: CreateEventFormState, formData: FormData) {
+    let err = false;
     try {
         const title = formData.get('title') as string;
         const startDate = formData.get('startDate') as string;
@@ -48,9 +49,8 @@ export async function createEvent(state: CreateEventFormState, formData: FormDat
 
         await Event.add(params);
 
-        redirect('dashboard/events');
-
     }  catch (error: any) {
+        err = true;
         if (error?.name === "ValidationError") {
             const errors: Record<string, string[]> = {};
             error.inner.forEach((err: any) => {
@@ -69,5 +69,9 @@ export async function createEvent(state: CreateEventFormState, formData: FormDat
                 genericerror: ["Errore durante la creazione dell0'evento. Riprova più tardi."],
             },
         };
+    } finally {
+        if (err) {
+            redirect('dashboard/events');
+        }
     }
 }

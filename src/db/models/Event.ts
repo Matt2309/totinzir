@@ -35,6 +35,10 @@ class Event {
             return { res: `New event created: ${res.toString()}`}
         })
     }
+
+    public async getAll(){
+        return prisma.event.findMany();
+    }
 }
 
 const event = new Event();

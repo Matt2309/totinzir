@@ -1,9 +1,25 @@
 'use client'
 import AnalyticsCard from "@/components/AnalyticsCard";
-import React from "react";
+import React, {useEffect, useState} from "react";
 import {CreateEventModal} from "@/components/CreateEventModal";
+import {getEventList} from "@/db/actions/getEventList";
+
+const fetchEvent = async (): Promise<any> => {
+    try {
+        return getEventList();
+    } catch (error) {
+        console.error(`Errore nel recupero eventi`, error);
+        return [];
+    }
+};
 
 export default function Events() {
+    const [eventList, setEventList] = useState([]);
+    useEffect(() => {
+        fetchEvent().then(res => {
+            console.log(res);
+            setEventList(res || [])});
+    }, []);
   return (
     <div>
         <main>
@@ -16,7 +32,7 @@ export default function Events() {
                 <AnalyticsCard title={"Incasso totale"} value={"€ 230000"} color={"--button_orange"}/>
             </div>
             <div className="flex flex-row gap-10 mt-5">
-                <div className="datatable relative flex flex-col w-full h-full overflow-scroll text-gray-700 bg-white shadow-lg rounded-lg bg-clip-border">
+                <div className="datatable relative flex flex-col w-full h-full text-gray-700 bg-white shadow-lg rounded-lg bg-clip-border">
                     <table className="w-full text-left table-auto min-w-max">
                         <thead>
                         <tr>
@@ -48,50 +64,30 @@ export default function Events() {
                         </tr>
                         </thead>
                         <tbody>
-                        <tr className="hover:bg-slate-50 border-b border-slate-200">
-                            <td className="p-4 py-5">
-                                <p className="block font-semibold text-sm text-slate-800">Evento assurdo</p>
-                            </td>
-                            <td className="p-4 py-5">
-                                <p className="text-sm text-slate-500">John Doe</p>
-                            </td>
-                            <td className="p-4 py-5">
-                                <p className="text-sm text-slate-500">$1,200.00</p>
-                            </td>
-                            <td className="p-4 py-5">
-                                <p className="text-sm text-slate-500">2024-08-01</p>
-                            </td>
-                            <td className="p-4 py-5">
-                                <div className="w-max">
-                                    <div
-                                        className="relative grid items-center px-2 py-1 font-sans text-xs font-bold uppercase rounded-md select-none whitespace-nowrap bg-red-500/20 text-blue-gray-900">
-                                        <span>TERMINATO</span>
+                        {eventList.map((event, index) => (
+                            <tr className="hover:bg-slate-50 border-b border-slate-200" key={index}>
+                                <td className="p-4 py-5">
+                                    <p className="block font-semibold text-sm text-slate-800">{event.title}</p>
+                                </td>
+                                <td className="p-4 py-5">
+                                    <p className="text-sm text-slate-500">{event.type}</p>
+                                </td>
+                                <td className="p-4 py-5">
+                                    <p className="text-sm text-slate-500">{event.location}</p>
+                                </td>
+                                <td className="p-4 py-5">
+                                    <p className="text-sm text-slate-500">{event.startDate.toLocaleDateString()}</p>
+                                </td>
+                                <td className="p-4 py-5">
+                                    <div className="w-max">
+                                        <div
+                                            className={`relative grid items-center px-2 py-1 font-sans text-xs font-bold uppercase rounded-md select-none whitespace-nowrap bg-${event.endDate < Date.now() ? "red-500/20" : "green-500/20"} text-blue-gray-900`}>
+                                            <span>{event.endDate < Date.now() ? "TERMINATO" : "IN CORSO"}</span>
+                                        </div>
                                     </div>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr className="hover:bg-slate-50 border-b border-slate-200">
-                            <td className="p-4 py-5">
-                                <p className="block font-semibold text-sm text-slate-800">Evento pazzesco</p>
-                            </td>
-                            <td className="p-4 py-5">
-                                <p className="text-sm text-slate-500">Jane Smith</p>
-                            </td>
-                            <td className="p-4 py-5">
-                                <p className="text-sm text-slate-500">$850.00</p>
-                            </td>
-                            <td className="p-4 py-5">
-                                <p className="text-sm text-slate-500">2024-08-05</p>
-                            </td>
-                            <td className="p-4 py-5">
-                                <div className="w-max">
-                                    <div
-                                        className="relative grid items-center px-2 py-1 font-sans text-xs font-bold text-green-900 uppercase rounded-md select-none whitespace-nowrap bg-green-500/20">
-                                        <span className="">IN CORSO</span>
-                                    </div>
-                                </div>
-                            </td>
-                        </tr>
+                                </td>
+                            </tr>
+                        ))}
                         </tbody>
                     </table>
 
