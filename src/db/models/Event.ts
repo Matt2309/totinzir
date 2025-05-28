@@ -11,7 +11,12 @@ interface EventCreateParams {
     topic: string,
     guideName: string,
     guideNumber: string,
-    description: string
+    description: string,
+    city: string;
+    street: string;
+    zip: string;
+    province: string;
+    country: string;
 }
 
 export interface EventInterface {
@@ -42,6 +47,15 @@ class Event {
                     connect: {
                         id: parseInt(params.category),
                     }
+                },
+                address: {
+                    create: {
+                            street: params.street,
+                            country: params.country,
+                            province: params.province,
+                            city: params.city,
+                            zip: params.zip,
+                    },
                 },
                 image: params.image,
                 topic: params.topic,

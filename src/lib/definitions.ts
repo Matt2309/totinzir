@@ -67,6 +67,21 @@ export const CreateEventSchema = yup.object().shape({
     location: yup
         .string()
         .required('Il luogo è obbligatorio'),
+    street: yup
+        .string()
+        .required('La via è obbligatoria'),
+    zip: yup
+        .number()
+        .required('Il CAP è obbligatorio'),
+    city: yup
+        .string()
+        .required('La città è obbligatoria'),
+    country: yup
+        .string()
+        .required('Lo stato è obbligatorio'),
+    province: yup
+        .string()
+        .required('La provincia è obbligatoria'),
 
     coordinates: yup
         .string()
@@ -165,7 +180,12 @@ export type CreateEventFormState =
         topic?: string[];
         guideName?: string[];
         guideNumber?: string[];
-        genericerror?: string[];
+        category?: string[];
+        city?: string[];
+        street?: string[];
+        zip?: string[];
+        province?: string[];
+        country?: string[];
     };
     message?: string;
 }

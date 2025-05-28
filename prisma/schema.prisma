@@ -44,9 +44,10 @@ model User {
   paymentMethod PaymentMethod?
   reviews       Review[]
   transactions  Transaction[]
-  address       Address?
+  address       Address?       @relation(fields: [addressId], references: [id])
   manager       Manager?
   Registry      Registry[]
+  addressId     Int?
 }
 
 model Transaction {
@@ -60,14 +61,16 @@ model Transaction {
 }
 
 model Registry {
-  id         Int    @id @default(autoincrement())
+  id         Int      @id @default(autoincrement())
   userId     Int
-  fiscalCode String @unique
+  addressId  Int?
+  fiscalCode String   @unique
   age        Int
   firstName  String
   lastName   String
   policy     String
-  user       User?  @relation(fields: [userId], references: [id])
+  user       User?    @relation(fields: [userId], references: [id])
+  address    Address? @relation(fields: [addressId], references: [id])
 }
 
 model EventHistory {
@@ -135,15 +138,15 @@ model Sponsorship {
 }
 
 model Address {
-  id       Int     @id @default(autoincrement())
-  user     User    @relation(fields: [userId], references: [id])
-  userId   Int     @unique
+  id       Int        @id @default(autoincrement())
   street   String
   zip      String
   country  String
   province String
   city     String
   Event    Event[]
+  User     User[]
+  Registry Registry[]
 }
 
 model Newsletter {

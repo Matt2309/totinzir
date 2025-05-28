@@ -7,18 +7,6 @@ import {redirect} from "next/navigation";
 export async function createEvent(state: CreateEventFormState, formData: FormData) {
     let err = false;
     try {
-        const title = formData.get('title') as string;
-        const startDate = formData.get('startDate') as string;
-        const endDate = formData.get('endDate') as string;
-        const location = formData.get('location') as string;
-        const coordinates = formData.get('coordinates') as string;
-        const category = formData.get('category') as string;
-        const image = formData.get('image') as string;
-        const topic = formData.get('topic') as string;
-        const guideName = formData.get('guideName') as string;
-        const guideNumber = formData.get('guideNumber') as string;
-        const description = formData.get('description') as string;
-
         const params = {
             title: formData.get('title') as string,
             startDate: formData.get('startDate') as string,
@@ -30,21 +18,31 @@ export async function createEvent(state: CreateEventFormState, formData: FormDat
             topic: formData.get('topic') as string,
             guideName: formData.get('guideName') as string,
             guideNumber: formData.get('guideNumber') as string,
-            description: formData.get('description') as string
+            description: formData.get('description') as string,
+            zip: formData.get('zip') as string,
+            city: formData.get('city') as string,
+            province: formData.get('province') as string,
+            street: formData.get('street') as string,
+            country: formData.get('country') as string
         }
 
         await CreateEventSchema.validate({
-            title,
-            startDate,
-            endDate,
-            location,
-            coordinates,
-            category,
-            image,
-            topic,
-            guideName,
-            guideNumber,
-            description,
+            title: params.title,
+            startDate: params.startDate,
+            endDate: params.endDate,
+            location: params.location,
+            coordinates: params.coordinates,
+            category: params.category,
+            image: params.image,
+            topic: params.topic,
+            guideName: params.guideName,
+            guideNumber: params.guideNumber,
+            description: params.description,
+            zip:  params.zip,
+            city:  params.city,
+            street:  params.street,
+            province:  params.province,
+            country:  params.country,
         }, { abortEarly: false });
 
         await Event.add(params);

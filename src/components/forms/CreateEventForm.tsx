@@ -50,39 +50,63 @@ export default function CreateEventForm() {
                             {state?.errors?.endDate && <p className="text-red-600 text-xs -mt-1">{state.errors.endDate}</p>}
                         </div>
                     </div>
-
                     <div>
                         <label className="mt-2 font-medium text-left block text-sm text-blue-gray-700">
                             Luogo
                         </label>
-                        <input type="text" name="location" placeholder="Es. Roma, Teatro Massimo"
+                        <input type="text" name="location" placeholder="Es. Teatro Massimo"
+                               className="border-2 border-[light-dark(var(--button_blue),var(--button_blue))] rounded-md h-10 p-2 text-sm w-full" />
+                        {state?.errors?.location && <p className="text-red-600 text-xs -mt-1">{state.errors.location}</p>}
+                    </div>
+                    <div>
+                        <label className="mt-2 font-medium text-left block text-sm text-blue-gray-700">
+                            Via
+                        </label>
+                        <input type="text" name="street" placeholder="Es. Via Roma, 42"
                                className="border-2 border-[light-dark(var(--button_blue),var(--button_blue))] rounded-md h-10 p-2 text-sm w-full" />
                         {state?.errors?.location && <p className="text-red-600 text-xs -mt-1">{state.errors.location}</p>}
                     </div>
 
-                    <div>
-                        <label className="mt-2 font-medium text-left block text-sm text-blue-gray-700">
-                            Coordinate
-                        </label>
-                        <input type="text" name="coordinates" placeholder="Es. 41.9028, 12.4964"
-                               className="border-2 border-[light-dark(var(--button_blue),var(--button_blue))] rounded-md h-10 p-2 text-sm w-full" />
-                        {state?.errors?.coordinates && <p className="text-red-600 text-xs -mt-1">{state.errors.coordinates}</p>}
+                    <div className="flex gap-4">
+                        <div className="w-3/6">
+                            <label className="mt-2 font-medium text-left block text-sm text-blue-gray-700">
+                                Città
+                            </label>
+                            <input type="text" name="city" placeholder="Es. Roma"
+                                   className="border-2 border-[light-dark(var(--button_blue),var(--button_blue))] rounded-md h-10 p-2 text-sm w-full" />
+                            {state?.errors?.city && <p className="text-red-600 text-xs -mt-1">{state.errors.city}</p>}
+                        </div>
+                        <div className="w-1/6">
+                            <label className="mt-2 font-medium text-left block text-sm text-blue-gray-700">
+                                Provincia
+                            </label>
+                            <input type="text" name="province" placeholder="Es. RM"
+                                   className="border-2 border-[light-dark(var(--button_blue),var(--button_blue))] rounded-md h-10 p-2 text-sm w-full" />
+                            {state?.errors?.province && <p className="text-red-600 text-xs -mt-1">{state.errors.province}</p>}
+                        </div>
+                        <div className="w-2/6">
+                            <label className="mt-2 font-medium text-left block text-sm text-blue-gray-700">
+                                CAP
+                            </label>
+                            <input type="text" name="zip" placeholder="Es. 49293"
+                                   className="border-2 border-[light-dark(var(--button_blue),var(--button_blue))] rounded-md h-10 p-2 text-sm w-full" />
+                            {state?.errors?.zip && <p className="text-red-600 text-xs -mt-1">{state.errors.zip}</p>}
+                        </div>
                     </div>
-
                     <div>
                         <label className="mt-2 font-medium text-left block text-sm text-blue-gray-700">
-                            Immagine (URL)
+                            Stato
                         </label>
-                        <input type="url" name="image" placeholder="https://esempio.com/immagine.jpg"
+                        <input type="text" name="country" placeholder="Es. Italia"
                                className="border-2 border-[light-dark(var(--button_blue),var(--button_blue))] rounded-md h-10 p-2 text-sm w-full" />
-                        {state?.errors?.image && <p className="text-red-600 text-xs -mt-1">{state.errors.image}</p>}
+                        {state?.errors?.country && <p className="text-red-600 text-xs -mt-1">{state.errors.country}</p>}
                     </div>
                 </div>
 
                 <div className="w-full">
                     <div>
                         <label className="mt-2 font-medium text-left block text-sm text-blue-gray-700">
-                            Tipo
+                            Categoria
                         </label>
                         <select name="category"
                                 className="border-2 border-[light-dark(var(--button_blue),var(--button_blue))] rounded-md h-10 p-2 text-sm w-full">
@@ -91,9 +115,8 @@ export default function CreateEventForm() {
                                 <option key={index} value={category.id}>{category.title}</option>
                             ))}
                         </select>
-                        {state?.errors?.type && <p className="text-red-600 text-xs -mt-1">{state.errors.category}</p>}
+                        {state?.errors?.category && <p className="text-red-600 text-xs -mt-1">{state.errors.category}</p>}
                     </div>
-
                     <div>
                         <label className="mt-2 font-medium text-left block text-sm text-blue-gray-700">
                             Argomento (opzionale)
@@ -102,7 +125,6 @@ export default function CreateEventForm() {
                                className="border-2 border-[light-dark(var(--button_blue),var(--button_blue))] rounded-md h-10 p-2 text-sm w-full" />
                         {state?.errors?.topic && <p className="text-red-600 text-xs -mt-1">{state.errors.topic}</p>}
                     </div>
-
                     <div className="flex gap-4">
                         <div className="w-full">
                             <label className="mt-2 font-medium text-left block text-sm text-blue-gray-700">
@@ -124,9 +146,27 @@ export default function CreateEventForm() {
 
                     <div>
                         <label className="mt-2 font-medium text-left block text-sm text-blue-gray-700">
+                            Coordinate
+                        </label>
+                        <input type="text" name="coordinates" placeholder="Es. 41.9028, 12.4964"
+                               className="border-2 border-[light-dark(var(--button_blue),var(--button_blue))] rounded-md h-10 p-2 text-sm w-full" />
+                        {state?.errors?.coordinates && <p className="text-red-600 text-xs -mt-1">{state.errors.coordinates}</p>}
+                    </div>
+
+                    <div>
+                        <label className="mt-2 font-medium text-left block text-sm text-blue-gray-700">
+                            Immagine (URL)
+                        </label>
+                        <input type="url" name="image" placeholder="https://esempio.com/immagine.jpg"
+                               className="border-2 border-[light-dark(var(--button_blue),var(--button_blue))] rounded-md h-10 p-2 text-sm w-full" />
+                        {state?.errors?.image && <p className="text-red-600 text-xs -mt-1">{state.errors.image}</p>}
+                    </div>
+
+                    <div>
+                        <label className="mt-2 font-medium text-left block text-sm text-blue-gray-700">
                             Descrizione
                         </label>
-                        <textarea name="description" rows="6" placeholder="Inserisci una descrizione dell'evento"
+                        <textarea name="description" rows="1" placeholder="Inserisci una descrizione dell'evento"
                                   className="border-2 border-[light-dark(var(--button_blue),var(--button_blue))] rounded-md p-2 text-sm w-full"></textarea>
                         {state?.errors?.description && <p className="text-red-600 text-xs -mt-1">{state.errors.description}</p>}
                     </div>
