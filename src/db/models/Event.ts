@@ -6,7 +6,22 @@ interface EventCreateParams {
     endDate: string,
     location: string,
     coordinates: string,
-    type: string,
+    category: string,
+    image: string,
+    topic: string,
+    guideName: string,
+    guideNumber: string,
+    description: string
+}
+
+export interface EventInterface {
+    id: number,
+    title: string,
+    startDate: string,
+    endDate: string,
+    location: string,
+    coordinates: string,
+    categoryId: number,
     image: string,
     topic: string,
     guideName: string,
@@ -23,7 +38,11 @@ class Event {
                 endDate: new Date(params.endDate),
                 location: params.location,
                 coordinates: params.coordinates,
-                type: params.type,
+                category: {
+                    connect: {
+                        id: parseInt(params.category),
+                    }
+                },
                 image: params.image,
                 topic: params.topic,
                 guideName: params.guideName,

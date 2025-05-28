@@ -1,10 +1,24 @@
 "use client";
-import React, {useActionState} from "react";
+import React, {useActionState, useEffect, useState} from "react";
 import {createEvent} from "@/db/actions/createEvent";
+import {getCategoryList} from "@/db/actions/getCategoryList";
+const fetchCategories = async (): Promise<any> => {
+    try {
+        return getCategoryList();
+    } catch (error) {
+        console.error(`Errore nel recupero eventi`, error);
+        return [];
+    }
+};
 
 export default function CreateEventForm() {
     const [state, action, pending] = useActionState(createEvent, undefined)
-
+    const [categoriesList, setCategoriesList] = useState([]);
+    useEffect(() => {
+        fetchCategories().then(res => {
+            console.log(res);
+            setCategoriesList(res || [])});
+    }, []);
     return (
         <form action={action}>
             <div className="flex gap-15">
@@ -70,14 +84,14 @@ export default function CreateEventForm() {
                         <label className="mt-2 font-medium text-left block text-sm text-blue-gray-700">
                             Tipo
                         </label>
-                        <select name="type"
+                        <select name="category"
                                 className="border-2 border-[light-dark(var(--button_blue),var(--button_blue))] rounded-md h-10 p-2 text-sm w-full">
-                            <option value="">Seleziona il tipo</option>
-                            <option>Festa</option>
-                            <option>Fiera</option>
-                            <option>Esperienza</option>
+                            <option value="">Seleziona la categoria</option>
+                            {categoriesList.map((category, index) => (
+                                <option key={index} value={category.id}>{category.title}</option>
+                            ))}
                         </select>
-                        {state?.errors?.type && <p className="text-red-600 text-xs -mt-1">{state.errors.type}</p>}
+                        {state?.errors?.type && <p className="text-red-600 text-xs -mt-1">{state.errors.category}</p>}
                     </div>
 
                     <div>

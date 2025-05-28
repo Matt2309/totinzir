@@ -12,7 +12,7 @@ export async function createEvent(state: CreateEventFormState, formData: FormDat
         const endDate = formData.get('endDate') as string;
         const location = formData.get('location') as string;
         const coordinates = formData.get('coordinates') as string;
-        const type = formData.get('type') as string;
+        const category = formData.get('category') as string;
         const image = formData.get('image') as string;
         const topic = formData.get('topic') as string;
         const guideName = formData.get('guideName') as string;
@@ -25,7 +25,7 @@ export async function createEvent(state: CreateEventFormState, formData: FormDat
             endDate: formData.get('endDate') as string,
             location: formData.get('location') as string,
             coordinates: formData.get('coordinates') as string,
-            type: formData.get('type') as string,
+            category: formData.get('category') as string,
             image: formData.get('image') as string,
             topic: formData.get('topic') as string,
             guideName: formData.get('guideName') as string,
@@ -39,7 +39,7 @@ export async function createEvent(state: CreateEventFormState, formData: FormDat
             endDate,
             location,
             coordinates,
-            type,
+            category,
             image,
             topic,
             guideName,
@@ -70,8 +70,8 @@ export async function createEvent(state: CreateEventFormState, formData: FormDat
             },
         };
     } finally {
-        if (err) {
-            redirect('dashboard/events');
+        if (!err) {
+            redirect('/dashboard/events');
         }
     }
 }

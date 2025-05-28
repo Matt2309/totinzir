@@ -4,10 +4,16 @@ import HeaderMain from "../components/Headers/HeaderMain"
 import EventCard from "@/components/EventCard";
 import {useEffect, useState} from "react";
 import {getEventList} from "@/db/actions/getEventList";
-
+import {EventInterface} from "@/db/models/Event";
+import {getCategoryById} from "@/db/actions/getCategoryById";
 const fetchEvent = async (): Promise<any> => {
     try {
-        return getEventList();
+        const eventList:EventInterface[] = await getEventList();
+        for (const ev of eventList) {
+            let category = await getCategoryById(ev.categoryId);
+            ev["categoryName"] = category.title;
+        }
+        return eventList;
     } catch (error) {
         console.error(`Errore nel recupero eventi`, error);
         return [];
@@ -17,7 +23,6 @@ export default function Home() {
     const [eventList, setEventList] = useState([]);
     useEffect(() => {
         fetchEvent().then(res => {
-            console.log(res);
             setEventList(res || [])});
     }, []);
     function getDayName(data) {
@@ -51,7 +56,7 @@ export default function Home() {
 
                 <div className="grid grid-cols-3 gap-x-25 gap-y-15 mt-10 mb-10">
                     {eventList.map((event, index) => (
-                        <EventCard key={index} category={event.type} dayName={getDayName(event.startDate)} dayNum={event.startDate.getDate()} time={formatAMPM(event.startDate)} city={event.location} title={event.title} img={event.image}/>
+                        <EventCard key={index} category={event.categoryName} dayName={getDayName(event.startDate)} dayNum={event.startDate.getDate()} time={formatAMPM(event.startDate)} city={event.location} title={event.title} img={event.image}/>
                     ))}
                 </div>
             </div>

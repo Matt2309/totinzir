@@ -173,14 +173,14 @@ model Event {
   coordinates  String
   image        String
   description  String
-  type         String
   topic        String?
   guideName    String?
   guideNumber  String?
   address      Address?       @relation(fields: [addressId], references: [id])
   addressId    Int?
+  categoryId   Int
   ticketTypes  TicketType[]
-  categories   Category[]
+  category     Category       @relation(fields: [categoryId], references: [id])
   activities   Activity[]
   sponsorships Sponsorship[]
   Newsletter   Newsletter[]
@@ -241,12 +241,11 @@ model TicketType {
 }
 
 model Category {
-  id         Int    @id @default(autoincrement())
+  id         Int     @id @default(autoincrement())
   title      String
-  difficulty String
-  duration   Int
-  event      Event  @relation(fields: [eventId], references: [id])
-  eventId    Int
+  difficulty String?
+  duration   Int?
+  events     Event[]
 }
 
 model Activity {

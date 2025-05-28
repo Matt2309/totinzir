@@ -76,10 +76,9 @@ export const CreateEventSchema = yup.object().shape({
         )
         .required('Le coordinate sono obbligatorie'),
 
-    type: yup
+    category: yup
         .string()
-        .oneOf(['Festa', 'Fiera', 'Esperienza'], 'Stato non valido')
-        .required('Lo stato è obbligatorio'),
+        .required('La categoria è obbligatoria'),
 
     image: yup
         .string()
@@ -106,6 +105,21 @@ export const CreateEventSchema = yup.object().shape({
     description: yup
         .string()
         .required('La descrizione è obbligatoria'),
+});
+
+export const CreateCategorySchema = yup.object().shape({
+    title: yup
+        .string()
+        .required('Il titolo è obbligatorio'),
+
+    duration: yup
+        .number()
+        .nullable()
+        .optional(),
+
+    difficulty: yup
+        .string()
+        .optional(),
 });
 
 export type SigninFormState =
@@ -151,6 +165,18 @@ export type CreateEventFormState =
         topic?: string[];
         guideName?: string[];
         guideNumber?: string[];
+        genericerror?: string[];
+    };
+    message?: string;
+}
+    | undefined;
+
+export type CreateCategoryFormState =
+    | {
+    errors?: {
+        title?: string[];
+        duration?: string[];
+        difficulty?: string[];
         genericerror?: string[];
     };
     message?: string;
