@@ -17,6 +17,7 @@ interface EventCreateParams {
     zip: string;
     province: string;
     country: string;
+    userId: number;
 }
 
 export interface EventInterface {
@@ -57,6 +58,11 @@ class Event {
                             city: params.city,
                             zip: params.zip,
                     },
+                },
+                organizer: {
+                    connect: {
+                        userId: params.userId,
+                    }
                 },
                 image: params.image,
                 topic: params.topic,

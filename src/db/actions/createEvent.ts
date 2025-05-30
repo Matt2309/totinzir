@@ -3,10 +3,13 @@
 import {CreateEventFormState, CreateEventSchema} from "@/lib/definitions";
 import Event from "@/db/models/Event";
 import {redirect} from "next/navigation";
+import {getSession} from "@/lib/sessions";
 
 export async function createEvent(state: CreateEventFormState, formData: FormData) {
     let err = false;
     try {
+        const session = await getSession();
+        const userId = session?.userId;
         const params = {
             title: formData.get('title') as string,
             startDate: formData.get('startDate') as string,
@@ -23,7 +26,8 @@ export async function createEvent(state: CreateEventFormState, formData: FormDat
             city: formData.get('city') as string,
             province: formData.get('province') as string,
             street: formData.get('street') as string,
-            country: formData.get('country') as string
+            country: formData.get('country') as string,
+            userId: userId
         }
 
         await CreateEventSchema.validate({
