@@ -52,6 +52,21 @@ class User {
         });
     }
 
+    public async upgradeRoleToOrganizer(email: string) {
+        return prisma.user.update({
+            where: {
+                email: email,
+            },
+            data: {
+                role: {
+                    connect: {
+                        title: 'manager'
+                    }
+                },
+            },
+        })
+    }
+
 }
 
 const user = new User();

@@ -45,7 +45,7 @@ model User {
   reviews       Review[]
   transactions  Transaction[]
   address       Address?       @relation(fields: [addressId], references: [id])
-  manager       Manager?
+  organizer     Organizer?
   Registry      Registry[]
   addressId     Int?
 }
@@ -87,7 +87,7 @@ model EventHistory {
   ticketsSold Int
 }
 
-model Manager {
+model Organizer {
   id          Int    @id @default(autoincrement())
   companyName String
   vatNumber   String

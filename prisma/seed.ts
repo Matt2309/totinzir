@@ -18,7 +18,16 @@ async function main() {
                 ],
             },
         },
-        { title: "manager" },
+        { title: "manager" ,
+            users: {
+                create: [
+                    {
+                        email: "eventmanager@email.com",
+                        password: psw,
+                    },
+                ],
+            },
+        },
         { title: "visitor" },
     ];
 

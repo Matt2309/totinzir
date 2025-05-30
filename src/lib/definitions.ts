@@ -137,6 +137,22 @@ export const CreateCategorySchema = yup.object().shape({
         .optional(),
 });
 
+export const UpgradeToOrganizerSchema = yup.object().shape({
+    email: yup
+        .string()
+        .trim()
+        .email('Inserisci un indirizzo email valido')
+        .required('Inserisci un indirizzo email valido'),
+
+    vatNumber: yup
+        .string()
+        .required('Inserisci una partita IVA'),
+
+    companyName: yup
+        .string()
+        .required('Inserisci una ragione sociale'),
+});
+
 export type SigninFormState =
     | {
     errors?: {
@@ -197,6 +213,18 @@ export type CreateCategoryFormState =
         title?: string[];
         duration?: string[];
         difficulty?: string[];
+        genericerror?: string[];
+    };
+    message?: string;
+}
+    | undefined;
+
+export type UpgradeToOrganizerFormState =
+    | {
+    errors?: {
+        email?: string[];
+        companyName?: string[];
+        vatNumber?: string[];
         genericerror?: string[];
     };
     message?: string;
