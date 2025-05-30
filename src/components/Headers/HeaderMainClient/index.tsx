@@ -1,9 +1,12 @@
 'use client'
 import Image from "next/image";
-import {useRouter} from "next/navigation";
+import {usePathname, useRouter} from "next/navigation";
 import { logout } from "@/db/actions/auth";
 
 export default function HeaderClient({ user }: { user: string | null }) {
+    const pathname = usePathname()
+
+    const isActive = (path: string) => pathname === path
     const router = useRouter();
 
     const handleClick = async () => {
@@ -21,7 +24,7 @@ export default function HeaderClient({ user }: { user: string | null }) {
     };
 
     return (
-        <div className="pl-20 pr-20 pt-2 flex justify-between items-center pb-1 w-full bg-gradient-to-b from-black/50 to-transparent">
+        <div className={`${isActive("/") ? "pl-20 pr-20 pt-2 flex justify-between items-center pb-1 w-full bg-gradient-to-b from-black/50 to-transparent" : "pl-20 pr-20 pt-2 flex justify-between items-center pb-1 w-full bg-[light-dark(var(--button_blue),var(--button_blue))]"}`}>
             <a href="/"><Image src="/logo_small_totinzir.svg" alt="header logo" width={100} height={66} /></a>
             <div className="flex gap-30 text-white">
                 <label>HOME</label>

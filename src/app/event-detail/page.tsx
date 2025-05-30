@@ -1,12 +1,12 @@
 'use client'
 import Image from "next/image";
-import Header from "../../components/Headers/Header"
 import ActivityCard from "@/components/ActivityCard";
 import TicketCard from "@/components/TicketCard";
 import {getEventWithCategory} from "@/db/actions/getEventById";
 import {useEffect, useState} from "react";
 import {useSearchParams} from "next/navigation";
 import {formatAMPM, getDayName} from "@/lib/utils";
+import HeaderMain from "@/components/Headers/HeaderMain";
 
 const fetchEvent = async (id): Promise<any> => {
     try {
@@ -41,7 +41,7 @@ export default function EventDetail() {
     <div>
         <main>
             <nav className="h-6/8 bg-[url(/landing_background.jpeg)] bg-cover bg-[position:0_-30em] pb-20">
-                <Header/>
+                <HeaderMain/>
                 <div className="pl-20 pr-20 mt-30">
                     <h1 className="text-white text-9xl text-center">{event.title}</h1>
                     <h3 className="text-white text-2xl text-center">event organizer</h3>

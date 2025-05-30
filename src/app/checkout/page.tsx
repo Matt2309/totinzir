@@ -1,11 +1,11 @@
-import Header from "../../components/Headers/Header";
 import ResumeLine from "@/components/ResumeLine";
+import HeaderMain from "@/components/Headers/HeaderMain";
 
 export default function checkout() {
   return (
     <div>
         <main className="flex flex-col items-center">
-            <Header/>
+            <HeaderMain/>
             <div className="block w-4/6">
                 <h1 className="text-4xl mt-20">CHECKOUT</h1>
                 <hr className="w-15 h-0.5 bg-black border-0 rounded-sm mb-5 dark:bg-black"/>
