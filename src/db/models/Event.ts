@@ -27,6 +27,7 @@ export interface EventInterface {
     location: string,
     coordinates: string,
     categoryId: number,
+    addressId: number,
     image: string,
     topic: string,
     guideName: string,
@@ -67,6 +68,17 @@ class Event {
         }).then((res) =>{
             return { res: `New event created: ${res.toString()}`}
         })
+    }
+
+    public async getById(id: number){
+        return prisma.event.findUnique({
+            where: {
+                id: parseInt(id.toString())
+            },
+            include: {
+                category: true,
+            }
+        });
     }
 
     public async getAll(){

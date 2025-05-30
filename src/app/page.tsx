@@ -6,6 +6,8 @@ import {useEffect, useState} from "react";
 import {getEventList} from "@/db/actions/getEventList";
 import {EventInterface} from "@/db/models/Event";
 import {getCategoryById} from "@/db/actions/getCategoryById";
+import Link from "next/link";
+import {formatAMPM, getDayName} from "@/lib/utils";
 const fetchEvent = async (): Promise<any> => {
     try {
         const eventList:EventInterface[] = await getEventList();
@@ -25,20 +27,6 @@ export default function Home() {
         fetchEvent().then(res => {
             setEventList(res || [])});
     }, []);
-    function getDayName(data) {
-        const days = ["DOM", "LUN", "MAR", "MER", "GIO", "VEN", "SAB"];
-        return days[data.getDay()];
-    }
-    function formatAMPM(date) {
-        let hours = date.getHours();
-        let minutes = date.getMinutes();
-        let ampm = hours >= 12 ? 'pm' : 'am';
-        hours = hours % 12;
-        hours = hours ? hours : 12; // the hour '0' should be '12'
-        minutes = minutes < 10 ? '0'+minutes : minutes;
-        let strTime = hours + ':' + minutes + ' ' + ampm;
-        return strTime;
-    }
   return (
     <div>
         <main>
@@ -56,8 +44,15 @@ export default function Home() {
 
                 <div className="grid grid-cols-3 gap-x-25 gap-y-15 mt-10 mb-10">
                     {eventList.map((event, index) => (
-                        <EventCard key={index} category={event.categoryName} dayName={getDayName(event.startDate)} dayNum={event.startDate.getDate()} time={formatAMPM(event.startDate)} city={event.location} title={event.title} img={event.image}/>
-                    ))}
+                        <Link key={index} href={{
+                            pathname: `/event-detail`,
+                            query: {
+                                eventId: event.id
+                            }
+                        }}>
+                            <EventCard key={index} category={event.categoryName} dayName={getDayName(event.startDate)} dayNum={event.startDate.getDate()} time={formatAMPM(event.startDate)} city={event.location} title={event.title} img={event.image}/>
+                        </Link>
+                ))}
                 </div>
             </div>
         </main>
