@@ -83,12 +83,15 @@ class Event {
             },
             include: {
                 category: true,
+                organizer: true
             }
         });
     }
 
     public async getAll(){
-        return prisma.event.findMany();
+        return prisma.event.findMany({include: {
+                organizer: true,
+            }});
     }
 }
 

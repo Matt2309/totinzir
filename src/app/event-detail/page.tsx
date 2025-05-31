@@ -44,7 +44,7 @@ export default function EventDetail() {
                 <HeaderMain/>
                 <div className="pl-20 pr-20 mt-30">
                     <h1 className="text-white text-9xl text-center">{event.title}</h1>
-                    <h3 className="text-white text-2xl text-center">event organizer</h3>
+                    <h3 className="text-white text-2xl text-center">{event.organizer.companyName}</h3>
                 </div>
             </nav>
             <nav className="bg-white p-10 pl-50 pr-50 flex justify-between">
