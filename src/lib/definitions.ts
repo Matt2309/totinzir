@@ -153,6 +153,43 @@ export const UpgradeToOrganizerSchema = yup.object().shape({
         .required('Inserisci una ragione sociale'),
 });
 
+export const CreateNewTicketTypeSchema = yup.object().shape({
+    title: yup
+        .string()
+        .required('Inserisci una partita IVA'),
+
+    minAge: yup
+        .number()
+        .nullable()
+        .optional(),
+    maxAge: yup
+        .number()
+        .nullable()
+        .optional(),
+
+    price: yup
+        .number()
+        .required('Inserisci un prezzo'),
+
+    startDate: yup
+        .date()
+        .typeError('Inserisci una data valida')
+        .required('La data di inizio è obbligatoria'),
+
+    endDate: yup
+        .date()
+        .typeError('Inserisci una data valida')
+        .min(
+            yup.ref('startDate'),
+            'La data di fine deve essere successiva a quella di inizio'
+        )
+        .required('La data di fine è obbligatoria'),
+
+    eventId: yup
+        .number()
+        .required('Inserisci un evento'),
+});
+
 export type SigninFormState =
     | {
     errors?: {
@@ -213,6 +250,23 @@ export type CreateCategoryFormState =
         title?: string[];
         duration?: string[];
         difficulty?: string[];
+        genericerror?: string[];
+    };
+    message?: string;
+}
+    | undefined;
+
+
+export type CreateNewTicketFormState =
+    | {
+    errors?: {
+        title?: string[];
+        minAge?: string[];
+        maxAge?: string[];
+        price?: string[];
+        startDate?: string[];
+        endDate?: string[];
+        eventId?: string[];
         genericerror?: string[];
     };
     message?: string;
