@@ -4,6 +4,7 @@ import {redirect} from "next/navigation";
 import {createSession, deleteSession} from "@/lib/sessions";
 import bcrypt from "bcrypt";
 import User from "@/db/models/User";
+import user from "@/db/models/User";
 
 export async function signIn(state: SigninFormState, formData: FormData) {
     let redirectLink;
@@ -108,4 +109,9 @@ export async function signUp(state: SignupFormState, formData: FormData) {
 export async function logout() {
     await deleteSession()
     redirect('/')
+}
+
+export async function isAdmin(id) {
+    const role = await user.getRole(id);
+    return role.title === 'admin';
 }

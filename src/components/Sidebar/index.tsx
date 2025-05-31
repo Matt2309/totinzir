@@ -2,11 +2,27 @@
 import { usePathname } from "next/navigation"
 import Link from "next/link";
 import Image from "next/image";
+import {useEffect, useState} from "react";
+import {isAdmin} from "@/db/actions/auth";
 
-export default function Sidebar() {
+const getIsAdmin = async (id): Promise<any> => {
+    try {
+        return isAdmin(id);
+    } catch (error) {
+        console.error(`Errore: `, error);
+        return [];
+    }
+};
+
+export default function Sidebar({userId}) {
     const pathname = usePathname()
-
     const isActive = (path: string) => pathname === path
+    const [isAdmin, setIsAdmin] = useState(false);
+    useEffect(() => {
+        getIsAdmin(userId).then(res => {
+            console.log(res);
+            setIsAdmin(res || false)});
+    }, []);
 
   return (
       <aside id="default-sidebar" className="fixed top-0 left-0 z-40 w-64 h-screen transition-transform -translate-x-full sm:translate-x-0" aria-label="Sidebar">
@@ -24,48 +40,52 @@ export default function Sidebar() {
               </div>
               <hr className="w-full h-[1px] bg-black border-0 rounded-sm mb-3 dark:bg-blue-900 "/>
               <ul className="space-y-2 font-medium">
-                  <li>
-                      <Link href="/dashboard/events" className={`flex items-center p-2  rounded-lg dark:text-white hover:bg-blue-900 dark:hover:bg-blue-900 group sidebar-item ${isActive("/dashboard/events") ? "active" : ""}`}>
-                          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="size-6">
-                              <path strokeLinecap="round" strokeLinejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5" />
-                          </svg>
-                          <span className="ms-3">Eventi</span>
-                      </Link>
-                  </li>
-                  <li>
-                      <Link href="/dashboard/categories" className={`flex items-center p-2  rounded-lg dark:text-white hover:bg-blue-900 dark:hover:bg-blue-900 group sidebar-item ${isActive("/dashboard/categories") ? "active" : ""}`}>
-                          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="size-6">
-                              <path strokeLinecap="round" strokeLinejoin="round" d="M9.568 3H5.25A2.25 2.25 0 0 0 3 5.25v4.318c0 .597.237 1.17.659 1.591l9.581 9.581c.699.699 1.78.872 2.607.33a18.095 18.095 0 0 0 5.223-5.223c.542-.827.369-1.908-.33-2.607L11.16 3.66A2.25 2.25 0 0 0 9.568 3Z" />
-                              <path strokeLinecap="round" strokeLinejoin="round" d="M6 6h.008v.008H6V6Z" />
-                          </svg>
-                          <span className="ms-3">Categorie</span>
-                      </Link>
-                  </li>
-                  <li>
-                      <Link href="/dashboard/tickets" className={`flex items-center p-2  rounded-lg dark:text-white hover:bg-blue-900 dark:hover:bg-blue-900 group sidebar-item ${isActive("/dashboard/tickets") ? "active" : ""}`}>
-                          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="size-6">
-                              <path strokeLinecap="round" strokeLinejoin="round" d="M16.5 6v.75m0 3v.75m0 3v.75m0 3V18m-9-5.25h5.25M7.5 15h3M3.375 5.25c-.621 0-1.125.504-1.125 1.125v3.026a2.999 2.999 0 0 1 0 5.198v3.026c0 .621.504 1.125 1.125 1.125h17.25c.621 0 1.125-.504 1.125-1.125v-3.026a2.999 2.999 0 0 1 0-5.198V6.375c0-.621-.504-1.125-1.125-1.125H3.375Z" />
-                          </svg>
-                          <span className="flex-1 ms-3 whitespace-nowrap">Biglietti</span>
-                      </Link>
-                  </li>
-                  <li>
-                      <Link href="/dashboard/sponsors" className={`flex items-center p-2  rounded-lg dark:text-white hover:bg-blue-900 dark:hover:bg-blue-900 group sidebar-item ${isActive("/dashboard/sponsors") ? "active" : ""}`}>
-                          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="size-6">
-                              <path strokeLinecap="round" strokeLinejoin="round" d="M21 11.25v8.25a1.5 1.5 0 0 1-1.5 1.5H5.25a1.5 1.5 0 0 1-1.5-1.5v-8.25M12 4.875A2.625 2.625 0 1 0 9.375 7.5H12m0-2.625V7.5m0-2.625A2.625 2.625 0 1 1 14.625 7.5H12m0 0V21m-8.625-9.75h18c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125h-18c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125Z" />
-                          </svg>
-                          <span className="flex-1 ms-3 whitespace-nowrap">Sponsor</span>
-                      </Link>
-                  </li>
-                  <li>
-                      <Link href="/dashboard/organizers" className={`flex items-center p-2  rounded-lg dark:text-white hover:bg-blue-900 dark:hover:bg-blue-900 group sidebar-item ${isActive("/dashboard/organizers") ? "active" : ""}`}>
-                          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="size-6">
-                              <path strokeLinecap="round" strokeLinejoin="round" d="M18 7.5v3m0 0v3m0-3h3m-3 0h-3m-2.25-4.125a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0ZM3 19.235v-.11a6.375 6.375 0 0 1 12.75 0v.109A12.318 12.318 0 0 1 9.374 21c-2.331 0-4.512-.645-6.374-1.766Z" />
-                          </svg>
+                      <li>
+                          <Link href="/dashboard/events" className={`flex items-center p-2  rounded-lg dark:text-white hover:bg-blue-900 dark:hover:bg-blue-900 group sidebar-item ${isActive("/dashboard/events") ? "active" : ""}`}>
+                              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="size-6">
+                                  <path strokeLinecap="round" strokeLinejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5" />
+                              </svg>
+                              <span className="ms-3">Eventi</span>
+                          </Link>
+                      </li>
+                      <li>
+                          <Link href="/dashboard/categories" className={`flex items-center p-2  rounded-lg dark:text-white hover:bg-blue-900 dark:hover:bg-blue-900 group sidebar-item ${isActive("/dashboard/categories") ? "active" : ""}`}>
+                              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="size-6">
+                                  <path strokeLinecap="round" strokeLinejoin="round" d="M9.568 3H5.25A2.25 2.25 0 0 0 3 5.25v4.318c0 .597.237 1.17.659 1.591l9.581 9.581c.699.699 1.78.872 2.607.33a18.095 18.095 0 0 0 5.223-5.223c.542-.827.369-1.908-.33-2.607L11.16 3.66A2.25 2.25 0 0 0 9.568 3Z" />
+                                  <path strokeLinecap="round" strokeLinejoin="round" d="M6 6h.008v.008H6V6Z" />
+                              </svg>
+                              <span className="ms-3">Categorie</span>
+                          </Link>
+                      </li>
+                      <li>
+                          <Link href="/dashboard/tickets" className={`flex items-center p-2  rounded-lg dark:text-white hover:bg-blue-900 dark:hover:bg-blue-900 group sidebar-item ${isActive("/dashboard/tickets") ? "active" : ""}`}>
+                              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="size-6">
+                                  <path strokeLinecap="round" strokeLinejoin="round" d="M16.5 6v.75m0 3v.75m0 3v.75m0 3V18m-9-5.25h5.25M7.5 15h3M3.375 5.25c-.621 0-1.125.504-1.125 1.125v3.026a2.999 2.999 0 0 1 0 5.198v3.026c0 .621.504 1.125 1.125 1.125h17.25c.621 0 1.125-.504 1.125-1.125v-3.026a2.999 2.999 0 0 1 0-5.198V6.375c0-.621-.504-1.125-1.125-1.125H3.375Z" />
+                              </svg>
+                              <span className="flex-1 ms-3 whitespace-nowrap">Biglietti</span>
+                          </Link>
+                      </li>
+                      <li>
+                          <Link href="/dashboard/sponsors" className={`flex items-center p-2  rounded-lg dark:text-white hover:bg-blue-900 dark:hover:bg-blue-900 group sidebar-item ${isActive("/dashboard/sponsors") ? "active" : ""}`}>
+                              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="size-6">
+                                  <path strokeLinecap="round" strokeLinejoin="round" d="M21 11.25v8.25a1.5 1.5 0 0 1-1.5 1.5H5.25a1.5 1.5 0 0 1-1.5-1.5v-8.25M12 4.875A2.625 2.625 0 1 0 9.375 7.5H12m0-2.625V7.5m0-2.625A2.625 2.625 0 1 1 14.625 7.5H12m0 0V21m-8.625-9.75h18c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125h-18c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125Z" />
+                              </svg>
+                              <span className="flex-1 ms-3 whitespace-nowrap">Sponsor</span>
+                          </Link>
+                      </li>
+                  {isAdmin?
+                      <li>
+                          <Link href="/dashboard/organizers" className={`flex items-center p-2  rounded-lg dark:text-white hover:bg-blue-900 dark:hover:bg-blue-900 group sidebar-item ${isActive("/dashboard/organizers") ? "active" : ""}`}>
+                              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="size-6">
+                                  <path strokeLinecap="round" strokeLinejoin="round" d="M18 7.5v3m0 0v3m0-3h3m-3 0h-3m-2.25-4.125a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0ZM3 19.235v-.11a6.375 6.375 0 0 1 12.75 0v.109A12.318 12.318 0 0 1 9.374 21c-2.331 0-4.512-.645-6.374-1.766Z" />
+                              </svg>
 
-                          <span className="flex-1 ms-3 whitespace-nowrap">Organizzatori</span>
-                      </Link>
-                  </li>
+                              <span className="flex-1 ms-3 whitespace-nowrap">Organizzatori</span>
+                          </Link>
+                      </li>
+                      :
+                      <></>
+                  }
               </ul>
           </div>
       </aside>

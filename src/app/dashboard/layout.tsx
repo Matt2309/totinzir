@@ -20,7 +20,7 @@ export default async function SpecialLayoutDashboard({ children }: { children: R
         return (
             <div className="flex h-screen overflow-hidden bg-detail">
                 {/* Sidebar fissa */}
-                <Sidebar />
+                <Sidebar userId={user}/>
 
                 {/* Contenuto a destra della sidebar */}
                 <div className="flex flex-col flex-1 overflow-auto ml-64">
