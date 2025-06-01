@@ -41,10 +41,10 @@ class TicketType {
         })
     }
 
-    public async getAll(){
+    public async getAllByEvent(eventId){
         return prisma.ticketType.findMany({
-            include: {
-                event: true
+            where: {
+                eventId: eventId
             }
         });
     }

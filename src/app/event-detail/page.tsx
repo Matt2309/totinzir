@@ -2,15 +2,14 @@
 import Image from "next/image";
 import ActivityCard from "@/components/ActivityCard";
 import TicketCard from "@/components/TicketCard";
-import {getEventWithCategory} from "@/db/actions/getEventById";
+import {getEventWithCategoryAndTicket} from "@/db/actions/getEventById";
 import {useEffect, useState} from "react";
 import {useSearchParams} from "next/navigation";
 import {formatAMPM, getDayName} from "@/lib/utils";
 import HeaderMain from "@/components/Headers/HeaderMain";
-
 const fetchEvent = async (id): Promise<any> => {
     try {
-        const event = await getEventWithCategory(id);
+        const event = await getEventWithCategoryAndTicket(id);
         console.log("event: ",event)
         return event;
     } catch (error) {
@@ -70,7 +69,9 @@ export default function EventDetail() {
                     </div>
                 </div>
                 <button className="bg-[light-dark(var(--button_orange),var(--button_orange))] font-bold py-0.5 px-20 rounded-md text-white">
-                    BIGLIETTI
+                    <a href="#tickets">
+                        BIGLIETTI
+                    </a>
                 </button>
             </nav>
             <nav className="p-10 pl-50 pr-50">
@@ -78,11 +79,22 @@ export default function EventDetail() {
                 <label className="text-gray-500">{event.description}</label>
 
                 <div className="flex flex-col items-center mt-20">
-                    <h1 className="text-4xl text-gray-800">biglietti</h1>
+                    <h1 className="text-4xl text-gray-800" id="tickets">biglietti</h1>
                     <hr className="w-15 h-0.5 mx-auto bg-black border-0 rounded-sm md:my-1 dark:bg-black"/>
                     <div className="bg-white p-10 w-3/4 rounded-xl mt-5 flex flex-col gap-y-5">
-                        <TicketCard title={'Intero'} price={20}/>
-                        <TicketCard title={'Intero'} price={20}/>
+                        {event.ticketTypes.map((ticket, index) => (
+                            <TicketCard key={index} title={ticket.title} price={ticket.price} minAge={ticket.minAge} maxAge={ticket.maxAge}/>
+                        ))}
+                        {event.ticketTypes.length > 0 ?
+                            <div className="flex justify-end mt-5">
+                                <button className="bg-[light-dark(var(--button_orange),var(--button_orange))] font-bold py-1 px-20 rounded-md text-white">
+                                    ACQUISTA
+                                </button>
+                            </div> :
+                            <div className="flex justify-center">
+                                <h1 className="text-xl text-gray-600">Biglietti non disponibili</h1>
+                            </div>
+                        }
                     </div>
 
                     <h1 className="text-4xl text-gray-800 mt-10">attività</h1>

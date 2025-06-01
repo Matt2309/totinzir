@@ -83,7 +83,7 @@ class Event {
             },
             include: {
                 category: true,
-                organizer: true
+                organizer: true,
             }
         });
     }
