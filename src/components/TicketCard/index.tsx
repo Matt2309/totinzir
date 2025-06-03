@@ -1,19 +1,33 @@
-import {useState} from "react";
+import {useEffect, useState} from "react";
 
 type Props = {
+    id: number;
     title: string;
     price: number;
+    minAge: number;
+    maxAge: number;
+    onQuantityChange: (id: number, title: string, quantity: number, price: number) => void;
 };
 
-export default function TicketCard({title, price, minAge, maxAge}: Props) {
+export default function TicketCard({id, title, price, minAge, maxAge, onQuantityChange}: Props) {
     const [quantity, setQuantity] = useState(0);
-
+    useEffect(() => {
+        onQuantityChange(id, title, quantity, price); // Notify parent of change
+    }, [quantity]);
     const handleDecrease = () => {
-        setQuantity(prevQuantity => Math.max(0, prevQuantity - 1)); // Ensure quantity doesn't go below 1
+        let newQuantity;
+        setQuantity(prevQuantity => {
+            newQuantity = Math.max(0, prevQuantity - 1); // Allow 0 quantity
+            return newQuantity;
+        });
     };
 
     const handleIncrease = () => {
-        setQuantity(prevQuantity => prevQuantity + 1);
+        let newQuantity;
+        setQuantity(prevQuantity => {
+            newQuantity = prevQuantity + 1;
+            return newQuantity;
+        });
     };
   return (
 

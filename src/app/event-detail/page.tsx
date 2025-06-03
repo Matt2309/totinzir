@@ -3,7 +3,7 @@ import Image from "next/image";
 import ActivityCard from "@/components/ActivityCard";
 import TicketCard from "@/components/TicketCard";
 import {getEventWithCategoryAndTicket} from "@/db/actions/getEventById";
-import {useEffect, useState} from "react";
+import {useCallback, useEffect, useState} from "react";
 import {useSearchParams} from "next/navigation";
 import {formatAMPM, getDayName} from "@/lib/utils";
 import HeaderMain from "@/components/Headers/HeaderMain";
@@ -21,12 +21,35 @@ const fetchEvent = async (id): Promise<any> => {
 export default function EventDetail() {
     const searchParams = useSearchParams()
     const [event, setEvent] = useState<any>(null);
+    const [selectedTickets, setSelectedTickets] = useState({});
+
+    const handleQuantityChange = useCallback((ticketId, title, quantity, price) => {
+        setSelectedTickets(prevSelectedTickets => {
+            const updatedTickets = { ...prevSelectedTickets };
+            if (quantity > 0) {
+                updatedTickets[ticketId] = { title, quantity, price };
+            } else {
+                delete updatedTickets[ticketId];
+            }
+            return updatedTickets;
+        });
+    }, []);
+
     useEffect(() => {
         const eventId = searchParams.get('eventId');
 
         fetchEvent(eventId).then(res => {
             setEvent(res || null)});
     }, []);
+
+    const handleCheckout = () => {
+        try {
+            console.log("event: ",selectedTickets)
+        } catch (error) {
+            console.error(`Errore nel recupero biglietti`, error);
+            return null;
+        }
+    };
 
     if (!event) {
         return (
@@ -83,11 +106,19 @@ export default function EventDetail() {
                     <hr className="w-15 h-0.5 mx-auto bg-black border-0 rounded-sm md:my-1 dark:bg-black"/>
                     <div className="bg-white p-10 w-3/4 rounded-xl mt-5 flex flex-col gap-y-5">
                         {event.ticketTypes.map((ticket, index) => (
-                            <TicketCard key={index} title={ticket.title} price={ticket.price} minAge={ticket.minAge} maxAge={ticket.maxAge}/>
+                            <TicketCard key={index}
+                                        id={ticket.id}
+                                        title={ticket.title}
+                                        price={ticket.price}
+                                        minAge={ticket.minAge}
+                                        maxAge={ticket.maxAge}
+                                        onQuantityChange={handleQuantityChange} // Pass the callback
+                            />
                         ))}
                         {event.ticketTypes.length > 0 ?
                             <div className="flex justify-end mt-5">
-                                <button className="bg-[light-dark(var(--button_orange),var(--button_orange))] font-bold py-1 px-20 rounded-md text-white">
+                                <button className="bg-[light-dark(var(--button_orange),var(--button_orange))] font-bold py-1 px-20 rounded-md text-white"
+                                onClick={handleCheckout}>
                                     ACQUISTA
                                 </button>
                             </div> :
