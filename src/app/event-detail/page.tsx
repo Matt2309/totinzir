@@ -2,11 +2,12 @@
 import Image from "next/image";
 import ActivityCard from "@/components/ActivityCard";
 import TicketCard from "@/components/TicketCard";
-import {getEventWithCategoryAndTicket} from "@/db/actions/getEventById";
+import {getEventWithCategoryAndTicket} from "@/db/actions/getEventWithCategoryAndTicketById";
 import {useCallback, useEffect, useState} from "react";
-import {useSearchParams} from "next/navigation";
+import {useSearchParams, useRouter} from "next/navigation";
 import {formatAMPM, getDayName} from "@/lib/utils";
 import HeaderMain from "@/components/Headers/HeaderMain";
+
 const fetchEvent = async (id): Promise<any> => {
     try {
         const event = await getEventWithCategoryAndTicket(id);
@@ -19,6 +20,7 @@ const fetchEvent = async (id): Promise<any> => {
 };
 
 export default function EventDetail() {
+    const router = useRouter()
     const searchParams = useSearchParams()
     const [event, setEvent] = useState<any>(null);
     const [selectedTickets, setSelectedTickets] = useState({});
@@ -26,8 +28,9 @@ export default function EventDetail() {
     const handleQuantityChange = useCallback((ticketId, title, quantity, price) => {
         setSelectedTickets(prevSelectedTickets => {
             const updatedTickets = { ...prevSelectedTickets };
+            const eventId = searchParams.get('eventId');
             if (quantity > 0) {
-                updatedTickets[ticketId] = { title, quantity, price };
+                updatedTickets[ticketId] = { title, quantity, price, eventId };
             } else {
                 delete updatedTickets[ticketId];
             }
@@ -45,6 +48,8 @@ export default function EventDetail() {
     const handleCheckout = () => {
         try {
             console.log("event: ",selectedTickets)
+            const encodedData = encodeURIComponent(JSON.stringify(selectedTickets));
+            router.push(`/checkout?data=${encodedData}`);
         } catch (error) {
             console.error(`Errore nel recupero biglietti`, error);
             return null;

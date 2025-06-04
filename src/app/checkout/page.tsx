@@ -1,8 +1,50 @@
+'use client'
+
 import ResumeLine from "@/components/ResumeLine";
 import HeaderMain from "@/components/Headers/HeaderMain";
+import {useEffect, useState} from "react";
+import {useSearchParams} from "next/navigation";
+import {getEvent} from "@/db/actions/getEventById";
+
+const fetchEvent = async (id): Promise<any> => {
+    try {
+        return await getEvent(id);
+    } catch (error) {
+        console.error(`Errore nel recupero eventi`, error);
+        return null;
+    }
+};
 
 export default function checkout() {
-  return (
+    const searchParams = useSearchParams();
+    const [selectedTickets, setSelectedTickets] = useState(null);
+    const [total, setTotal] = useState(0);
+
+
+    useEffect(() => {
+        const data = searchParams.get('data');
+        if (data) {
+            try {
+                const decodedData = JSON.parse(decodeURIComponent(data));
+                const fetchEventsAndSet = async () => {
+                    await Promise.all(
+                        Object.entries(decodedData).map(async ([id, ticket]) => {
+                            ticket.event = await fetchEvent(ticket.eventId);
+                            setTotal(total + ticket.price*ticket.quantity )
+                        })
+                    );
+                    setSelectedTickets(decodedData);
+                };
+                fetchEventsAndSet();
+            } catch (error) {
+                console.error("Errore nel parsing dei dati JSON:", error);
+            }
+        }
+    }, [searchParams]);
+
+    if (!selectedTickets) return <p>Caricamento biglietti...</p>
+
+    return (
     <div>
         <main className="flex flex-col items-center">
             <HeaderMain/>
@@ -94,9 +136,9 @@ export default function checkout() {
                 </div>
                 <div className="overflow-hidden relative rounded-r-3xl bg-[#D9D9D9] p-10">
                     <h1 className="text-3xl text-gray-700">riepilogo</h1>
-
-                    <ResumeLine quantity={2} ticketType={"INTERO"} eventName={"FESTA PAZZESCA"} price={20} city={"RIMINI (RN)"} date={"20 AGOSTO 2025"}/>
-
+                    {Object.entries(selectedTickets).map(([id, ticket]) => (
+                        <ResumeLine key={id} quantity={ticket.quantity} ticketType={ticket.title} eventName={ticket.event?.title || ""} price={ticket.price.toFixed(2)} city={ticket.event.location} date={ticket.event.startDate.toLocaleDateString()}/>
+                    ))}
                     <div className="flex flex-row justify-between w-3/4 mt-2">
                         <h1 className="text-xl text-gray-700">costi di servizio</h1>
                         <label className="text-lg">€2</label>
@@ -104,7 +146,7 @@ export default function checkout() {
                     <hr className="w-60 h-[1px] bg-black border-0 rounded-sm mb-3 dark:bg-black"/>
                     <div className="flex flex-row justify-between w-3/4">
                         <h1 className="text-xl text-gray-700">totale</h1>
-                        <label className="text-lg">€32</label>
+                        <label className="text-lg">€{(total).toFixed(2)}</label>
                     </div>
                 </div>
             </div>
