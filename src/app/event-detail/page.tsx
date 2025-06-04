@@ -122,7 +122,7 @@ export default function EventDetail() {
                         ))}
                         {event.ticketTypes.length > 0 ?
                             <div className="flex justify-end mt-5">
-                                <button className="bg-[light-dark(var(--button_orange),var(--button_orange))] font-bold py-1 px-20 rounded-md text-white"
+                                <button disabled={Object.keys(selectedTickets).length === 0} className="bg-[light-dark(var(--button_orange),var(--button_orange))] font-bold py-1 px-20 rounded-md text-white"
                                 onClick={handleCheckout}>
                                     ACQUISTA
                                 </button>

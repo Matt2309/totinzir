@@ -26,13 +26,15 @@ export default function checkout() {
         if (data) {
             try {
                 const decodedData = JSON.parse(decodeURIComponent(data));
+                let total = 0;
                 const fetchEventsAndSet = async () => {
                     await Promise.all(
                         Object.entries(decodedData).map(async ([id, ticket]) => {
                             ticket.event = await fetchEvent(ticket.eventId);
-                            setTotal(total + ticket.price*ticket.quantity )
+                            total += ticket.price*ticket.quantity;
                         })
                     );
+                    setTotal(total);
                     setSelectedTickets(decodedData);
                 };
                 fetchEventsAndSet();
@@ -146,7 +148,7 @@ export default function checkout() {
                     <hr className="w-60 h-[1px] bg-black border-0 rounded-sm mb-3 dark:bg-black"/>
                     <div className="flex flex-row justify-between w-3/4">
                         <h1 className="text-xl text-gray-700">totale</h1>
-                        <label className="text-lg">€{(total).toFixed(2)}</label>
+                        <label className="text-lg">€{(total + 2).toFixed(2)}</label>
                     </div>
                 </div>
             </div>
