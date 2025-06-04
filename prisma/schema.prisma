@@ -22,6 +22,8 @@ model Review {
   stars       Int
   user        User    @relation(fields: [userId], references: [id])
   userId      Int
+  event       Event?  @relation(fields: [eventId], references: [id])
+  eventId     Int?
 }
 
 model PaymentMethod {
@@ -44,20 +46,19 @@ model User {
   paymentMethod PaymentMethod?
   reviews       Review[]
   transactions  Transaction[]
-  address       Address?       @relation(fields: [addressId], references: [id])
   organizer     Organizer?
   Registry      Registry[]
-  addressId     Int?
 }
 
 model Transaction {
-  id        Int        @id @default(autoincrement())
-  date      DateTime
-  amount    Float
-  status    String
-  user      User       @relation(fields: [userId], references: [id])
-  userId    Int
-  operation Operation?
+  id      Int      @id @default(autoincrement())
+  date    DateTime
+  amount  Float
+  status  String
+  user    User     @relation(fields: [userId], references: [id])
+  userId  Int
+  order   Order    @relation(fields: [orderId], references: [id])
+  orderId Int      @unique
 }
 
 model Registry {
@@ -96,13 +97,6 @@ model Organizer {
   Event       Event[]
 }
 
-model Operation {
-  transaction   Transaction @relation(fields: [transactionId], references: [id])
-  transactionId Int         @id
-  order         Order       @relation(fields: [orderId], references: [id])
-  orderId       Int         @unique
-}
-
 model Role {
   id    Int    @id @default(autoincrement())
   title String @unique
@@ -110,22 +104,22 @@ model Role {
 }
 
 model Order {
-  id        Int        @id @default(autoincrement())
-  total     Float
-  date      DateTime
-  operation Operation?
-  tickets   Ticket[]
+  id          Int          @id @default(autoincrement())
+  total       Float
+  commission  Float
+  date        DateTime
+  tickets     Ticket[]
+  Transaction Transaction?
 }
 
 model Sponsor {
-  id           Int            @id @default(autoincrement())
+  id           Int           @id @default(autoincrement())
   name         String
   contact      String
   daysCount    Int
   budget       Float
   logo         String
   type         String
-  codes        DiscountCode[]
   sponsorships Sponsorship[]
 }
 
@@ -146,7 +140,6 @@ model Address {
   province String
   city     String
   Event    Event[]
-  User     User[]
   Registry Registry[]
 }
 
@@ -159,12 +152,11 @@ model Newsletter {
 }
 
 model DiscountCode {
-  code      String  @id
-  name      String
-  sponsor   Sponsor @relation(fields: [sponsorId], references: [id])
-  sponsorId Int
-  event     Event   @relation(fields: [eventId], references: [id])
-  eventId   Int
+  code         String @id
+  name         String
+  discountPerc Float
+  event        Event  @relation(fields: [eventId], references: [id])
+  eventId      Int
 }
 
 model Event {
@@ -192,6 +184,7 @@ model Event {
   Newsletter   Newsletter[]
   DiscountCode DiscountCode[]
   Exhibition   Exhibition[]
+  Review       Review[]
 }
 
 model Exhibition {
@@ -226,7 +219,6 @@ model Ticket {
   firstName    String
   lastName     String
   format       String
-  commission   Float
   order        Order      @relation(fields: [orderId], references: [id])
   orderId      Int
   ticketType   TicketType @relation(fields: [ticketTypeId], references: [id])
