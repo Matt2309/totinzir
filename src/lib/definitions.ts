@@ -1,4 +1,5 @@
 import * as yup from 'yup';
+import {purchaseTickets} from "@/db/actions/purchaseTickets";
 export const SignInFormSchema = yup.object({
     email: yup
         .string()
@@ -190,6 +191,62 @@ export const CreateNewTicketTypeSchema = yup.object().shape({
         .required('Inserisci un evento'),
 });
 
+export const PurchaseTicketsSchema = yup.object().shape({
+    firstname: yup
+        .string()
+        .required('Inserisci un nome valido'),
+    lastname: yup
+        .string()
+        .required('Inserisci un cognome valido'),
+
+    birthDate: yup
+        .date()
+        .min(new Date(-1735693200))
+        .typeError('Inserisci una data valida')
+        .required('La data di nascita è obbligatoria'),
+
+    email: yup
+        .string()
+        .trim()
+        .email('Inserisci una mail valida')
+        .required('Inserisci una mail valida'),
+
+    birthplace: yup
+        .string()
+        .required('Inserisci una città valida'),
+
+    zip: yup
+        .number()
+        .required('Inserisci un CAP valido'),
+    country: yup
+        .string()
+        .required('Lo stato è obbligatorio'),
+    province: yup
+        .string()
+        .required('La provincia è obbligatoria'),
+
+    address: yup
+        .string()
+        .required("L'indirizzo è obbligatorio"),
+
+    phone: yup
+        .string()
+        .matches(
+            /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/,
+            "Telefono non valido",
+        ),
+
+    cardNumber: yup
+        .string()
+        .required('Il numero carta è obbligatorio'),
+    expiryDate: yup
+        .string()
+        .required('La data di scadenza è obbligatoria'),
+    cvv: yup
+        .string()
+        .required('Il CVV è obbligatorio'),
+});
+
 export type SigninFormState =
     | {
     errors?: {
@@ -279,6 +336,31 @@ export type UpgradeToOrganizerFormState =
         email?: string[];
         companyName?: string[];
         vatNumber?: string[];
+        genericerror?: string[];
+    };
+    message?: string;
+}
+    | undefined;
+
+export type PurchaseTicketsFormState =
+    | {
+    errors?: {
+        firstname?: string[];
+        lastname?: string[];
+        day?: string[];
+        month?: string[];
+        year?: string[];
+        email?: string[];
+        birthDate?: string[];
+        birthplace?: string[];
+        zip?: string[];
+        province?: string[];
+        country?: string[];
+        address?: string[];
+        phone?: string[];
+        cardNumber?: string[];
+        expiryDate?: string[];
+        cvv?: string[];
         genericerror?: string[];
     };
     message?: string;

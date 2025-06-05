@@ -105,18 +105,18 @@ export default function checkout() {
             </div>
             <div className="grid grid-cols-[60%_40%] bg-white w-4/6 rounded-3xl mb-10">
                 <div className="p-10">
-                    <form action={action} className="space-y-6">
+                    <form action={action}>
                         {/* Nome e Cognome */}
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                             <div>
                                 <label className="block mb-1 text-sm">Nome</label>
-                                <input className="w-full border-2 border-[light-dark(var(--button_blue),var(--button_blue))] rounded-md h-10 p-2 text-sm" type="text" name="firstname" placeholder="Mario" />
-                                {state?.errors?.email && <p className="text-red-600 text-xs -mt-1">{state.errors.firstname}</p>}
+                                <input className="mb-2 w-full border-2 border-[light-dark(var(--button_blue),var(--button_blue))] rounded-md h-10 p-2 text-sm" type="text" name="firstname" placeholder="Mario" />
+                                {state?.errors?.firstname && <p className="text-red-600 text-xs -mt-1">{state.errors.firstname}</p>}
                             </div>
                             <div>
                                 <label className="block mb-1 text-sm">Cognome</label>
-                                <input className="w-full border-2 border-[light-dark(var(--button_blue),var(--button_blue))] rounded-md h-10 p-2 text-sm" type="text" name="lastname" placeholder="Rossi" />
-                                {state?.errors?.email && <p className="text-red-600 text-xs -mt-1">{state.errors.lastname}</p>}
+                                <input className="mb-2 w-full border-2 border-[light-dark(var(--button_blue),var(--button_blue))] rounded-md h-10 p-2 text-sm" type="text" name="lastname" placeholder="Rossi" />
+                                {state?.errors?.lastname && <p className="text-red-600 text-xs -mt-1">{state.errors.lastname}</p>}
                             </div>
                         </div>
 
@@ -143,7 +143,7 @@ export default function checkout() {
                                 />
                                 <span className="text-xl self-center">/</span>
                                 <input
-                                    className="w-1/4 border-2 border-[light-dark(var(--button_blue),var(--button_blue))] rounded-md h-10 p-2 text-center text-sm"
+                                    className="mb-2 w-1/4 border-2 border-[light-dark(var(--button_blue),var(--button_blue))] rounded-md h-10 p-2 text-center text-sm"
                                     placeholder="AAAA"
                                     name="year"
                                     maxLength="4"
@@ -151,13 +151,13 @@ export default function checkout() {
                                     onChange={(e) => handleDateChange(e, null)}
                                 />
                             </div>
-                            {state?.errors?.birthday && <p className="text-red-600 text-xs -mt-1">{state.errors.birthday}</p>}
+                            {state?.errors?.birthDate && <p className="text-red-600 text-xs -mt-1">{state.errors.birthDate}</p>}
                         </div>
 
                         {/* Email */}
                         <div>
                             <label className="block mb-1 text-sm">Email</label>
-                            <input className="w-full border-2 border-[light-dark(var(--button_blue),var(--button_blue))] rounded-md h-10 p-2 text-sm" type="email" name="email" placeholder="mario.rossi@email.com" />
+                            <input className="mb-2 w-full border-2 border-[light-dark(var(--button_blue),var(--button_blue))] rounded-md h-10 p-2 text-sm" type="email" name="email" placeholder="mario.rossi@email.com" />
                             {state?.errors?.email && <p className="text-red-600 text-xs -mt-1">{state.errors.email}</p>}
                         </div>
 
@@ -165,22 +165,22 @@ export default function checkout() {
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                             <div>
                                 <label className="block mb-1 text-sm">Città di nascita</label>
-                                <input className="w-full border-2 border-[light-dark(var(--button_blue),var(--button_blue))] rounded-md h-10 p-2 text-sm" type="text" name="birthplace" placeholder="Bologna" />
+                                <input className="mb-2 w-full border-2 border-[light-dark(var(--button_blue),var(--button_blue))] rounded-md h-10 p-2 text-sm" type="text" name="birthplace" placeholder="Bologna" />
                                 {state?.errors?.birthplace && <p className="text-red-600 text-xs -mt-1">{state.errors.birthplace}</p>}
                             </div>
                             <div>
                                 <label className="block mb-1 text-sm">CAP</label>
-                                <input className="w-full border-2 border-[light-dark(var(--button_blue),var(--button_blue))] rounded-md h-10 p-2 text-sm" type="text" name="zip" placeholder="40100" />
+                                <input className="mb-2 w-full border-2 border-[light-dark(var(--button_blue),var(--button_blue))] rounded-md h-10 p-2 text-sm" type="text" name="zip" placeholder="40100" />
                                 {state?.errors?.zip && <p className="text-red-600 text-xs -mt-1">{state.errors.zip}</p>}
                             </div>
                             <div>
                                 <label className="block mb-1 text-sm">Provincia</label>
-                                <input className="w-full border-2 border-[light-dark(var(--button_blue),var(--button_blue))] rounded-md h-10 p-2 text-sm" type="text" name="province" placeholder="BO" />
+                                <input className="mb-2 w-full border-2 border-[light-dark(var(--button_blue),var(--button_blue))] rounded-md h-10 p-2 text-sm" type="text" name="province" placeholder="BO" />
                                 {state?.errors?.province && <p className="text-red-600 text-xs -mt-1">{state.errors.province}</p>}
                             </div>
                             <div>
                                 <label className="block mb-1 text-sm">Paese</label>
-                                <input className="w-full border-2 border-[light-dark(var(--button_blue),var(--button_blue))] rounded-md h-10 p-2 text-sm" type="text" name="country" placeholder="Italia" />
+                                <input className="mb-2 w-full border-2 border-[light-dark(var(--button_blue),var(--button_blue))] rounded-md h-10 p-2 text-sm" type="text" name="country" placeholder="Italia" />
                                 {state?.errors?.country && <p className="text-red-600 text-xs -mt-1">{state.errors.country}</p>}
                             </div>
                         </div>
@@ -188,14 +188,14 @@ export default function checkout() {
                         {/* Indirizzo */}
                         <div>
                             <label className="block mb-1 text-sm">Indirizzo</label>
-                            <input className="w-full border-2 border-[light-dark(var(--button_blue),var(--button_blue))] rounded-md h-10 p-2 text-sm" type="text" name="address" placeholder="Via Roma 12" />
+                            <input className="mb-2 w-full border-2 border-[light-dark(var(--button_blue),var(--button_blue))] rounded-md h-10 p-2 text-sm" type="text" name="address" placeholder="Via Roma 12" />
                             {state?.errors?.address && <p className="text-red-600 text-xs -mt-1">{state.errors.address}</p>}
                         </div>
 
                         {/* Telefono */}
                         <div>
                             <label className="block mb-1 text-sm">Telefono</label>
-                            <input className="w-full border-2 border-[light-dark(var(--button_blue),var(--button_blue))] rounded-md h-10 p-2 text-sm" type="tel" name="phone" placeholder="3331234567" />
+                            <input className="mb-2 w-full border-2 border-[light-dark(var(--button_blue),var(--button_blue))] rounded-md h-10 p-2 text-sm" type="tel" name="phone" placeholder="3331234567" />
                             {state?.errors?.phone && <p className="text-red-600 text-xs -mt-1">{state.errors.phone}</p>}
                         </div>
 
@@ -206,7 +206,7 @@ export default function checkout() {
                             <h3 className="text-lg font-semibold mb-3">Dettagli Pagamento</h3>
                             <label className="block mb-1 text-sm">Numero Carta</label>
                             <input
-                                className="w-full border-2 border-[light-dark(var(--button_blue),var(--button_blue))] rounded-md h-10 p-2 text-sm"
+                                className="mb-2 w-full border-2 border-[light-dark(var(--button_blue),var(--button_blue))] rounded-md h-10 p-2 text-sm"
                                 type="text"
                                 name="cardNumber"
                                 placeholder="XXXX XXXX XXXX XXXX"
@@ -220,7 +220,7 @@ export default function checkout() {
                             <div>
                                 <label className="block mb-1 text-sm">Scadenza</label>
                                 <input
-                                    className="w-full border-2 border-[light-dark(var(--button_blue),var(--button_blue))] rounded-md h-10 p-2 text-sm"
+                                    className="mb-2 w-full border-2 border-[light-dark(var(--button_blue),var(--button_blue))] rounded-md h-10 p-2 text-sm"
                                     type="text"
                                     name="expiryDate"
                                     placeholder="MM/AA"
@@ -232,7 +232,7 @@ export default function checkout() {
                             <div>
                                 <label className="block mb-1 text-sm">CVV</label>
                                 <input
-                                    className="w-full border-2 border-[light-dark(var(--button_blue),var(--button_blue))] rounded-md h-10 p-2 text-sm"
+                                    className="mb-2 w-full border-2 border-[light-dark(var(--button_blue),var(--button_blue))] rounded-md h-10 p-2 text-sm"
                                     type="text"
                                     name="cvv"
                                     placeholder="XXX"
@@ -243,9 +243,13 @@ export default function checkout() {
                                 {state?.errors?.cvv && <p className="text-red-600 text-xs -mt-1">{state.errors.cvv}</p>}
                             </div>
                         </div>
+                        <div className="flex items-end pb-1">
+                            <input className="mr-2 h-4 w-4 text-[light-dark(var(--button_blue),var(--button_blue))] border-[light-dark(var(--button_blue),var(--button_blue))] rounded" type="checkbox" name="savePayment" id="savePayment" value="true"/>
+                            <label htmlFor="savePayment" className="text-sm">Salva metodo di pagamento</label>
+                        </div>
 
                         {/* Submit */}
-                        <div className="pt-4">
+                        <div className="pt-4 mb-2">
                             <button type="submit" className="bg-[light-dark(var(--button_orange),var(--button_orange))] font-bold py-2 px-6 rounded-md text-white text-sm">
                                 Esegui l'ordine
                             </button>
