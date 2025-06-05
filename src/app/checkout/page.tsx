@@ -106,6 +106,18 @@ export default function checkout() {
             <div className="grid grid-cols-[60%_40%] bg-white w-4/6 rounded-3xl mb-10">
                 <div className="p-10">
                     <form action={action}>
+                        <input type="hidden" name="totalAmount" value={(total + 2).toFixed(2)} />
+                        <input type="hidden" name="commission" value={2} />
+
+                        {selectedTickets && Object.entries(selectedTickets).map(([id, ticket], index) => (
+                            <div key={id}>
+                                <input type="hidden" name={`tickets[${index}][id]`} value={id} />
+                                <input type="hidden" name={`tickets[${index}][title]`} value={ticket.title} />
+                                <input type="hidden" name={`tickets[${index}][quantity]`} value={ticket.quantity} />
+                                <input type="hidden" name={`tickets[${index}][price]`} value={ticket.price} />
+                                <input type="hidden" name={`tickets[${index}][eventId]`} value={ticket.eventId} />
+                            </div>
+                        ))}
                         {/* Nome e Cognome */}
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                             <div>

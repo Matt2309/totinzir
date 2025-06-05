@@ -240,8 +240,10 @@ export const PurchaseTicketsSchema = yup.object().shape({
         .string()
         .required('Il numero carta è obbligatorio'),
     expiryDate: yup
-        .string()
-        .required('La data di scadenza è obbligatoria'),
+        .date()
+        .min(new Date(Date.now()))
+        .typeError('Inserisci una data di scadenza valida')
+        .required('Inserisci una data di scadenza'),
     cvv: yup
         .string()
         .required('Il CVV è obbligatorio'),
