@@ -2,11 +2,22 @@
 import AnalyticsCard from "@/components/AnalyticsCard";
 import React, {useEffect, useState} from "react";
 import {CreateEventModal} from "@/components/CreateEventModal";
-import {getEventList} from "@/db/actions/getEventList";
+import {getAllOrganizerEvents} from "@/db/actions/getAllOrganizerEvents";
+import {useUser} from "@/context/UserContext";
+import {getTotalTicketsSoldByUser} from "@/db/actions/stats";
 
-const fetchEvent = async (): Promise<any> => {
+const fetchEvent = async (id): Promise<any> => {
     try {
-        return getEventList();
+        return getAllOrganizerEvents(id);
+    } catch (error) {
+        console.error(`Errore nel recupero eventi`, error);
+        return [];
+    }
+};
+
+const fetchTotalRevenue = async (id): Promise<any> => {
+    try {
+        return getTotalTicketsSoldByUser(id);
     } catch (error) {
         console.error(`Errore nel recupero eventi`, error);
         return [];
@@ -15,10 +26,15 @@ const fetchEvent = async (): Promise<any> => {
 
 export default function Events() {
     const [eventList, setEventList] = useState([]);
+    const [totalRev, setTotalRev] = useState(0);
+    const { userId } = useUser();
+
     useEffect(() => {
-        fetchEvent().then(res => {
-            console.log(res);
+        fetchEvent(userId).then(res => {
             setEventList(res || [])});
+
+        fetchTotalRevenue(userId).then(res => {
+            setTotalRev(res || 0)});
     }, []);
   return (
     <div>
@@ -28,8 +44,8 @@ export default function Events() {
                 <CreateEventModal/>
             </div>
             <div className="flex flex-row gap-10 mt-5">
-                <AnalyticsCard title={"Biglietti totali"} value={"1.000"} color={"--button_blue"}/>
-                <AnalyticsCard title={"Incasso totale"} value={"€ 230000"} color={"--button_orange"}/>
+                <AnalyticsCard title={"Eventi totali"} value={eventList.length.toString()} color={"--button_blue"}/>
+                <AnalyticsCard title={"Incasso totale"} value={`€${totalRev}`} color={"--button_orange"}/>
             </div>
             <div className="flex flex-row gap-10 mt-5">
                 <div className="datatable relative flex flex-col w-full h-full text-gray-700 bg-white shadow-lg rounded-lg bg-clip-border">

@@ -4,7 +4,6 @@ import AnalyticsCard from "@/components/AnalyticsCard";
 import React, {useEffect, useState} from "react";
 import {CreateTicketTypeModal} from "@/components/CreateTicketTypeModal";
 import {getTicketTypesByUser} from "@/db/actions/getTicketTypesByUser";
-import {verifySession} from "@/lib/dal";
 import {useUser} from "@/context/UserContext";
 
 const fetchTypes = async (id): Promise<any> => {

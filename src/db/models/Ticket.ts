@@ -1,4 +1,5 @@
 import {prisma} from '@/lib/prisma'
+import {getTicketTypesByUser} from "@/db/actions/getTicketTypesByUser";
 
 class Ticket{
     public async add(params) {
@@ -24,23 +25,18 @@ class Ticket{
         return { res: `Tickets added`}
     }
 
-    public async getAllByUserId(id){
-        const transactions = await prisma.transaction.findMany({
-            where: {
-                id,
-                status: "ok",
-            },
-            include: {
-                order: {
-                    include: {
-                        tickets: true,
-                    },
-                },
-            },
-        });
-
-        const tickets = transactions.flatMap(tr => tr.order.tickets);
-        return tickets;
+    public async getTotalRevenueUserId(id){
+        let total = 0;
+        const ticketTypes = await getTicketTypesByUser(id);
+        for (const tt of ticketTypes) {
+            const tickets = await prisma.ticket.findMany({
+                where: {
+                    ticketTypeId: tt.id
+                }
+            });
+            total += tickets.length * tt.price;
+        }
+        return total;
     }
 }
 

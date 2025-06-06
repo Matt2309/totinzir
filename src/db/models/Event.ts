@@ -93,6 +93,20 @@ class Event {
                 organizer: true,
             }});
     }
+
+    public async getByUserId(id: number){
+        const organizer = await prisma.organizer.findUnique({
+            where: { userId: id },
+        });
+
+        if (!organizer) return [];
+
+        return prisma.event.findMany({
+            where: {
+                organizerId: organizer.id
+            },
+        });
+    }
 }
 
 const event = new Event();

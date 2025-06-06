@@ -28,8 +28,7 @@ export default function Categories() {
                 <CreateCategoryModal/>
             </div>
             <div className="flex flex-row gap-10 mt-5">
-                <AnalyticsCard title={"Biglietti totali"} value={"1.000"} color={"--button_blue"}/>
-                <AnalyticsCard title={"Incasso totale"} value={"€ 230000"} color={"--button_orange"}/>
+                <AnalyticsCard title={"Categorie totali"} value={categoriesList.length.toString()} color={"--button_blue"}/>
             </div>
             <div className="flex flex-row gap-10 mt-5">
                 <div className="datatable relative flex flex-col w-full h-full text-gray-700 bg-white shadow-lg rounded-lg bg-clip-border">
