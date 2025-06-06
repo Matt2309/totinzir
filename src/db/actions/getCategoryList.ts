@@ -1,9 +1,9 @@
 'use server'
 import Category from "@/db/models/Category";
 
-export async function getCategoryList() {
+export async function getCategoryList(id: number) {
     try {
-        return await Category.getAll();
+        return await Category.getAllByUserId(id);
     }  catch (error: any) {
         console.error("Unexpected error during getCategoryList:", error);
 

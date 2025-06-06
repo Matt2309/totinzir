@@ -96,6 +96,7 @@ model Organizer {
   userId      Int          @unique
   Event       Event[]
   ticketTypes TicketType[]
+  Category    Category[]
 }
 
 model Role {
@@ -242,11 +243,13 @@ model TicketType {
 }
 
 model Category {
-  id         Int     @id @default(autoincrement())
-  title      String
-  difficulty String?
-  duration   Int?
-  events     Event[]
+  id          Int        @id @default(autoincrement())
+  title       String
+  difficulty  String?
+  duration    Int?
+  events      Event[]
+  Organizer   Organizer? @relation(fields: [organizerId], references: [id])
+  organizerId Int?
 }
 
 model Activity {

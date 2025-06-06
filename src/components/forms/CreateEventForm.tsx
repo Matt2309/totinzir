@@ -2,9 +2,10 @@
 import React, {useActionState, useEffect, useState} from "react";
 import {createEvent} from "@/db/actions/createEvent";
 import {getCategoryList} from "@/db/actions/getCategoryList";
-const fetchCategories = async (): Promise<any> => {
+import {useUser} from "@/context/UserContext";
+const fetchCategories = async (userId): Promise<any> => {
     try {
-        return getCategoryList();
+        return getCategoryList(userId);
     } catch (error) {
         console.error(`Errore nel recupero eventi`, error);
         return [];
@@ -14,8 +15,9 @@ const fetchCategories = async (): Promise<any> => {
 export default function CreateEventForm() {
     const [state, action, pending] = useActionState(createEvent, undefined)
     const [categoriesList, setCategoriesList] = useState([]);
+    const { userId } = useUser();
     useEffect(() => {
-        fetchCategories().then(res => {
+        fetchCategories(parseInt(userId.toString())).then(res => {
             console.log(res);
             setCategoriesList(res || [])});
     }, []);

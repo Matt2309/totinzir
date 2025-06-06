@@ -3,20 +3,23 @@
 import {CreateCategoryFormState, CreateCategorySchema} from "@/lib/definitions";
 import {redirect} from "next/navigation";
 import Category from "@/db/models/Category";
+import {getSession} from "@/lib/sessions";
 
 export async function createCategory(state: CreateCategoryFormState, formData: FormData) {
     let err = false;
     try {
-
+        const session = await getSession();
+        const userId = session?.userId;
         const params = {
             title: formData.get('title') as string,
             duration: formData.get('duration') as number,
             difficulty: formData.get('difficulty') as string,
+            userId: userId,
         }
 
         await CreateCategorySchema.validate({
             title: params.title,
-            duration: params.duration,
+            duration: params.duration || null,
             difficulty: params.difficulty,
         }, { abortEarly: false });
 

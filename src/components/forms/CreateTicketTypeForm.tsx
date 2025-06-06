@@ -2,9 +2,11 @@
 import React, {useActionState, useEffect, useState} from "react";
 import {getEventList} from "@/db/actions/getEventList";
 import {createNewTicketType} from "@/db/actions/createNewTicketType";
-const fetchEvent = async (): Promise<any> => {
+import {getAllOrganizerEvents} from "@/db/actions/getAllOrganizerEvents";
+import {useUser} from "@/context/UserContext";
+const fetchEvent = async (id: number): Promise<any> => {
     try {
-        return getEventList();
+        return getAllOrganizerEvents(id);
     } catch (error) {
         console.error(`Errore nel recupero eventi`, error);
         return [];
@@ -14,8 +16,9 @@ const fetchEvent = async (): Promise<any> => {
 export default function CreateTicketTypeForm() {
     const [state, action, pending] = useActionState(createNewTicketType, undefined)
     const [eventList, setEventList] = useState([]);
+    const { userId } = useUser();
     useEffect(() => {
-        fetchEvent().then(res => {
+        fetchEvent(parseInt(userId.toString())).then(res => {
             console.log(res);
             setEventList(res || [])});
     }, []);
