@@ -1,10 +1,10 @@
-// app/special/layout.tsx
 import '@/app/globals.css';
 import Sidebar from "@/components/Sidebar";
 import HeaderDashboard from "../../components/Headers/HeaderDashboard";
 import {verifySession} from "@/lib/dal";
 import {redirect} from "next/navigation";
 import User from "@/db/models/User";
+import {UserProvider} from "@/context/UserContext";
 
 export default async function SpecialLayoutDashboard({ children }: { children: React.ReactNode }) {
     const session = await verifySession();
@@ -29,7 +29,9 @@ export default async function SpecialLayoutDashboard({ children }: { children: R
 
                     {/* Contenuto dinamico della pagina */}
                     <main className="pt-30 pl-15 pr-15">
-                        {children}
+                        <UserProvider userId={user}>
+                            {children}
+                        </UserProvider>
                     </main>
                 </div>
             </div>

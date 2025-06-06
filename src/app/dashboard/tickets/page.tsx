@@ -3,11 +3,13 @@
 import AnalyticsCard from "@/components/AnalyticsCard";
 import React, {useEffect, useState} from "react";
 import {CreateTicketTypeModal} from "@/components/CreateTicketTypeModal";
-import {getEventList} from "@/db/actions/getEventList";
+import {getTicketTypesByUser} from "@/db/actions/getTicketTypesByUser";
+import {verifySession} from "@/lib/dal";
+import {useUser} from "@/context/UserContext";
 
-const fetchTypes = async (): Promise<any> => {
+const fetchTypes = async (id): Promise<any> => {
     try {
-        return getEventList();
+        return getTicketTypesByUser(id);
     } catch (error) {
         console.error(`Errore nel recupero eventi`, error);
         return [];
@@ -15,11 +17,13 @@ const fetchTypes = async (): Promise<any> => {
 };
 
 export default function Tickets() {
-    const [eventList, setEventList] = useState([]);
+    const [ticketList, setTicketList] = useState([]);
+    const { userId } = useUser();
+
     useEffect(() => {
-        fetchTypes().then(res => {
+        fetchTypes(userId).then(res => {
             console.log(res);
-            setEventList(res || [])});
+            setTicketList(res || [])});
     }, []);
 
   return (
@@ -41,53 +45,64 @@ export default function Tickets() {
                         <tr>
                             <th className="p-4 border-b border-slate-200 bg-[light-dark(var(--backgroundDetail),var(--backgroundDetail))]">
                                 <p className="text-sm font-normal leading-none text-slate-700">
-                                    Nome
+                                    Titolo
                                 </p>
                             </th>
                             <th className="p-4 border-b border-slate-200 bg-[light-dark(var(--backgroundDetail),var(--backgroundDetail))]">
                                 <p className="text-sm font-normal leading-none text-slate-700">
-                                    Categoria
+                                    Prezzo
                                 </p>
                             </th>
                             <th className="p-4 border-b border-slate-200 bg-[light-dark(var(--backgroundDetail),var(--backgroundDetail))]">
                                 <p className="text-sm font-normal leading-none text-slate-700">
-                                    Luogo
+                                    Nome evento
                                 </p>
                             </th>
                             <th className="p-4 border-b border-slate-200 bg-[light-dark(var(--backgroundDetail),var(--backgroundDetail))]">
                                 <p className="text-sm font-normal leading-none text-slate-700">
-                                    Data
+                                    Età minima
                                 </p>
                             </th>
                             <th className="p-4 border-b border-slate-200 bg-[light-dark(var(--backgroundDetail),var(--backgroundDetail))]">
                                 <p className="text-sm font-normal leading-none text-slate-700">
-                                    Stato
+                                    Età massima
+                                </p>
+                            </th>
+                            <th className="p-4 border-b border-slate-200 bg-[light-dark(var(--backgroundDetail),var(--backgroundDetail))]">
+                                <p className="text-sm font-normal leading-none text-slate-700">
+                                    Creato il
+                                </p>
+                            </th>
+                            <th className="p-4 border-b border-slate-200 bg-[light-dark(var(--backgroundDetail),var(--backgroundDetail))]">
+                                <p className="text-sm font-normal leading-none text-slate-700">
+                                    Scadenza
                                 </p>
                             </th>
                         </tr>
                         </thead>
                         <tbody>
-                        {eventList.map((event, index) => (
+                        {ticketList.map((ticket, index) => (
                             <tr className="hover:bg-slate-50 border-b border-slate-200" key={index}>
                                 <td className="p-4 py-5">
-                                    <p className="block font-semibold text-sm text-slate-800">{event.title}</p>
+                                    <p className="block font-semibold text-sm text-slate-800">{ticket.title}</p>
                                 </td>
                                 <td className="p-4 py-5">
-                                    <p className="text-sm text-slate-500">{event.type}</p>
+                                    <p className="text-sm text-slate-500">€{ticket.price}</p>
                                 </td>
                                 <td className="p-4 py-5">
-                                    <p className="text-sm text-slate-500">{event.location}</p>
+                                    <p className="text-sm text-slate-500">{ticket.event.title}</p>
                                 </td>
                                 <td className="p-4 py-5">
-                                    <p className="text-sm text-slate-500">{event.startDate.toLocaleDateString()}</p>
+                                    <p className="text-sm text-slate-500">{ticket.minAge}</p>
                                 </td>
                                 <td className="p-4 py-5">
-                                    <div className="w-max">
-                                        <div
-                                            className={`relative grid items-center px-2 py-1 font-sans text-xs font-bold uppercase rounded-md select-none whitespace-nowrap bg-${event.endDate < Date.now() ? "red-500/20" : "green-500/20"} text-blue-gray-900`}>
-                                            <span>{event.endDate < Date.now() ? "TERMINATO" : "IN CORSO"}</span>
-                                        </div>
-                                    </div>
+                                    <p className="text-sm text-slate-500">{ticket.maxAge}</p>
+                                </td>
+                                <td className="p-4 py-5">
+                                    <p className="text-sm text-slate-500">{ticket.startDate.toLocaleDateString()}</p>
+                                </td>
+                                <td className="p-4 py-5">
+                                    <p className="text-sm text-slate-500">{ticket.endDate.toLocaleDateString()}</p>
                                 </td>
                             </tr>
                         ))}

@@ -55,9 +55,23 @@ class TicketType {
         });
     }
 
-    public async getByOrganizerId(id: number){
-        return prisma.ticketType.findUnique({where: {id: id}});
+    public async getByUserId(id: number) {
+        const organizer = await prisma.organizer.findUnique({
+            where: { userId: id },
+        });
+
+        if (!organizer) return [];
+
+        return prisma.ticketType.findMany({
+            where: {
+                organizerId: organizer.id
+            },
+            include: {
+                event: true,
+            }
+        });
     }
+
 }
 
 const ticketType = new TicketType();
