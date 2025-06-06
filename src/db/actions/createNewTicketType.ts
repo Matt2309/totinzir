@@ -12,12 +12,13 @@ export async function createNewTicketType(state: CreateNewTicketFormState, formD
         const userId = session?.userId;
         const params = {
             title: formData.get('title') as string,
-            minAge: formData.get('minAge') as number,
-            maxAge: formData.get('maxAge') as number,
+            minAge: formData.get('minAge') || null as number,
+            maxAge: formData.get('maxAge') || null as number,
             price: formData.get('price') as number,
             startDate: formData.get('startDate') as string,
             endDate: formData.get('endDate') as string,
             eventId: formData.get('eventId') as number,
+            userId: userId,
         }
 
         await CreateNewTicketTypeSchema.validate({
@@ -45,7 +46,7 @@ export async function createNewTicketType(state: CreateNewTicketFormState, formD
             return { errors };
         }
 
-        console.error("Unexpected error during createEvent:", error);
+        console.error("Unexpected error during createNewTicketType:", error);
 
         return {
             errors: {

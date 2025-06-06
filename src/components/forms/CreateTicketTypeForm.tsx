@@ -27,7 +27,7 @@ export default function CreateTicketTypeForm() {
                         <label className="mt-2 font-medium text-left block text-sm text-blue-gray-700">
                             Titolo
                         </label>
-                        <input type="text" name="title" placeholder="Inserisci il titolo dell'evento"
+                        <input type="text" name="title" placeholder="Inserisci il titolo della tipologia"
                                className="border-2 border-[light-dark(var(--button_blue),var(--button_blue))] rounded-md h-10 p-2 text-sm w-full" />
                         {state?.errors?.title && <p className="text-red-600 text-xs -mt-1">{state.errors.title}</p>}
                     </div>
@@ -54,7 +54,7 @@ export default function CreateTicketTypeForm() {
                         <label className="mt-2 font-medium text-left block text-sm text-blue-gray-700">
                             Prezzo
                         </label>
-                        <input type="number" name="price" placeholder="€16"
+                        <input type="number" step="0.01" name="price" placeholder="€16"
                                className="border-2 border-[light-dark(var(--button_blue),var(--button_blue))] rounded-md h-10 p-2 text-sm w-full" />
                         {state?.errors?.price && <p className="text-red-600 text-xs -mt-1">{state.errors.price}</p>}
                     </div>

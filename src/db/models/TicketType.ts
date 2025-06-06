@@ -8,6 +8,7 @@ interface TicketTypeCreateParams {
     startDate: string,
     endDate: string,
     eventId: number,
+    userId: number,
 }
 
 export interface TicketTypeInterface {
@@ -25,11 +26,16 @@ class TicketType {
         await prisma.ticketType.create({
             data: {
                 title: params.title,
-                maxAge: parseInt(params.maxAge.toString()),
-                minAge: parseInt(params.minAge.toString()),
+                maxAge: params.maxAge ? parseInt(params.maxAge.toString()) : null,
+                minAge: params.minAge ? parseInt(params.minAge.toString()) : null,
                 price: parseFloat(params.price.toString()),
                 startDate: new Date(params.startDate),
                 endDate: new Date(params.endDate),
+                Organizer: {
+                  connect: {
+                      userId: parseInt(params.userId.toString()),
+                  }
+                },
                 event: {
                     connect: {
                         id: parseInt(params.eventId.toString()),
@@ -49,7 +55,7 @@ class TicketType {
         });
     }
 
-    public async getById(id: number){
+    public async getByOrganizerId(id: number){
         return prisma.ticketType.findUnique({where: {id: id}});
     }
 }

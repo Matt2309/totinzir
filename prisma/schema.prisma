@@ -89,12 +89,13 @@ model EventHistory {
 }
 
 model Organizer {
-  id          Int     @id @default(autoincrement())
+  id          Int          @id @default(autoincrement())
   companyName String
   vatNumber   String
-  user        User    @relation(fields: [userId], references: [id])
-  userId      Int     @unique
+  user        User         @relation(fields: [userId], references: [id])
+  userId      Int          @unique
   Event       Event[]
+  ticketTypes TicketType[]
 }
 
 model Role {
@@ -226,16 +227,18 @@ model Ticket {
 }
 
 model TicketType {
-  id        Int      @id @default(autoincrement())
-  title     String
-  maxAge    Int?
-  minAge    Int?
-  price     Float
-  startDate DateTime
-  endDate   DateTime
-  event     Event    @relation(fields: [eventId], references: [id])
-  eventId   Int
-  tickets   Ticket[]
+  id          Int        @id @default(autoincrement())
+  title       String
+  maxAge      Int?
+  minAge      Int?
+  price       Float
+  startDate   DateTime
+  endDate     DateTime
+  event       Event      @relation(fields: [eventId], references: [id])
+  eventId     Int
+  tickets     Ticket[]
+  Organizer   Organizer? @relation(fields: [organizerId], references: [id])
+  organizerId Int?
 }
 
 model Category {
