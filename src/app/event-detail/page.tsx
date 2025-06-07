@@ -7,6 +7,7 @@ import {useCallback, useEffect, useState} from "react";
 import {useSearchParams, useRouter} from "next/navigation";
 import {formatAMPM, getDayName} from "@/lib/utils";
 import HeaderMain from "@/components/Headers/HeaderMain";
+import {getEventSponsorList} from "@/db/actions/getEventSponsorList";
 
 const fetchEvent = async (id): Promise<any> => {
     try {
@@ -19,10 +20,20 @@ const fetchEvent = async (id): Promise<any> => {
     }
 };
 
+const fetchSponsor = async (id): Promise<any> => {
+    try {
+        return await getEventSponsorList(id);
+    } catch (error) {
+        console.error(`Errore nel recupero sponsor`, error);
+        return null;
+    }
+};
 export default function EventDetail() {
     const router = useRouter()
     const searchParams = useSearchParams()
     const [event, setEvent] = useState<any>(null);
+    const [sponsors, setSponsors] = useState<any>([]);
+
     const [selectedTickets, setSelectedTickets] = useState({});
 
     const handleQuantityChange = useCallback((ticketId, title, quantity, price) => {
@@ -43,6 +54,11 @@ export default function EventDetail() {
 
         fetchEvent(eventId).then(res => {
             setEvent(res || null)});
+
+        fetchSponsor(eventId).then(res => {
+            setSponsors(res || null)
+            console.log("sponsors: ", res)
+        });
     }, []);
 
     const handleCheckout = () => {
@@ -146,14 +162,15 @@ export default function EventDetail() {
                     <hr className="w-15 h-0.5 mx-auto bg-black border-0 rounded-sm md:my-1 dark:bg-black"/>
                     <h1 className="text-2xl text-gray-800 mt-10">main</h1>
                     <div className="grid grid-cols-3 gap-x-25 gap-y-15 mt-5 mb-10">
-                        <Image src="/logo_small_totinzir.svg" alt="header logo" width={100} height={66}></Image>
-                        <Image src="/logo_small_totinzir.svg" alt="header logo" width={100} height={66}></Image>
-                        <Image src="/logo_small_totinzir.svg" alt="header logo" width={100} height={66}></Image>
+                        {sponsors.filter(s => s.type == "main").map((sponsor, index) => (
+                            <Image key={index} src={sponsor.logo} alt="header logo" width={100} height={66}></Image>
+                        ))}
                     </div>
                     <h1 className="text-2xl text-gray-800">silver</h1>
                     <div className="grid grid-cols-3 gap-x-25 gap-y-15 mt-5 mb-10">
-                        <Image src="/logo_small_totinzir.svg" alt="header logo" width={100} height={66}></Image>
-                        <Image src="/logo_small_totinzir.svg" alt="header logo" width={100} height={66}></Image>
+                        {sponsors.filter(s => s.type == "silver").map((sponsor, index) => (
+                            <Image key={index} src={sponsor.logo} alt="header logo" width={100} height={66}></Image>
+                        ))}
                     </div>
                 </div>
             </nav>

@@ -1,7 +1,6 @@
 'use client'
 import React from "react";
 import BaseModal from "../BaseModal";
-import CreateTicketTypeForm from "@/components/forms/CreateTicketTypeForm";
 import CreateSponsorForm from "@/components/forms/CreateSponsorForm";
 
 export function CreateSponsorModal() {

@@ -48,8 +48,34 @@ class Sponsor {
 
     }
 
-    public async getAll() {
-        return prisma.sponsor.findMany();
+    public async getAll(id: number) {
+        return prisma.sponsor.findMany({
+            where: {
+                sponsorships: {
+                    some: {
+                        event: {
+                            organizer: {
+                                userId: id,
+                            },
+                        },
+                    },
+                },
+            },
+        });
+    }
+
+    public async getAllByEvent(id: number) {
+        return prisma.sponsor.findMany({
+            where: {
+                sponsorships: {
+                     some: {
+                        event: {
+                            id: parseInt(id.toString()),
+                        }
+                    }
+                },
+            },
+        });
     }
 }
 
