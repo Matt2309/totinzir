@@ -118,7 +118,6 @@ model Sponsor {
   id           Int           @id @default(autoincrement())
   name         String
   contact      String
-  daysCount    Int
   budget       Float
   logo         String
   type         String

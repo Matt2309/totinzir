@@ -1,5 +1,6 @@
 import * as yup from 'yup';
 import {purchaseTickets} from "@/db/actions/purchaseTickets";
+import {number} from "yup";
 export const SignInFormSchema = yup.object({
     email: yup
         .string()
@@ -249,6 +250,40 @@ export const PurchaseTicketsSchema = yup.object().shape({
         .required('Il CVV è obbligatorio'),
 });
 
+export const CreateSponsorSchema = yup.object().shape({
+    name: yup
+        .string()
+        .required('Inserisci un nome valido'),
+    contactName: yup
+        .string()
+        .required('Inserisci un referente valido'),
+    budget: yup
+        .number()
+        .required('Inserisci un budget'),
+    image: yup
+        .string()
+        .url('Inserisci un URL valido')
+        .required('Il campo immagine è obbligatorio'),
+    type: yup
+        .string()
+        .oneOf(["main", "silver"])
+        .required('Inserisci un tipo valido'),
+    events: yup
+        .array()
+        .of(
+            yup.number()
+                .required('Ogni evento deve essere un numero valido')
+                .typeError('Ogni evento deve essere un numero valido')
+                .test(
+                    'is-not-nan',
+                    'Ogni evento deve essere un numero valido',
+                    value => !isNaN(value)
+                )
+        )
+        .min(1, 'Scegli almeno un evento')
+        .required('Il campo eventi è obbligatorio'),
+});
+
 export type SigninFormState =
     | {
     errors?: {
@@ -363,6 +398,20 @@ export type PurchaseTicketsFormState =
         cardNumber?: string[];
         expiryDate?: string[];
         cvv?: string[];
+        genericerror?: string[];
+    };
+    message?: string;
+}
+    | undefined;
+
+export type SponsorFormState =
+    | {
+    errors?: {
+        name?: string[];
+        contactName?: string[];
+        budget?: string[];
+        image?: number[];
+        events?: string[];
         genericerror?: string[];
     };
     message?: string;
