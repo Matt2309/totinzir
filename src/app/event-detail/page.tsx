@@ -14,6 +14,7 @@ import {AddReviewModal} from "@/components/AddReviewModal";
 import {getReviewList} from "@/db/actions/getReviewList";
 import ReviewCard from "@/components/ReviewCard";
 import {useUser} from "@/context/UserContext";
+import {getStandByEvent} from "@/db/actions/getStandByEvent";
 
 const fetchEvent = async (id): Promise<any> => {
     try {
@@ -30,6 +31,15 @@ const fetchSponsor = async (id): Promise<any> => {
         return await getEventSponsorList(id);
     } catch (error) {
         console.error(`Errore nel recupero sponsor`, error);
+        return null;
+    }
+};
+
+const fetchStands = async (id): Promise<any> => {
+    try {
+        return await getStandByEvent(id);
+    } catch (error) {
+        console.error(`Errore nel recupero stands`, error);
         return null;
     }
 };
@@ -57,6 +67,7 @@ export default function EventDetail() {
     const [sponsors, setSponsors] = useState<any>([]);
     const [activities, setActivities] = useState<any>([]);
     const [reviews, setReviews] = useState<any>([]);
+    const [stands, setStands] = useState<any>([]);
 
     const [selectedTickets, setSelectedTickets] = useState({});
     const { userId } = useUser();
@@ -91,6 +102,10 @@ export default function EventDetail() {
 
         fetchReviews(parseInt(eventId.toString())).then(res => {
             setReviews(res || null)
+        });
+
+        fetchStands(parseInt(eventId.toString())).then(res => {
+            setStands(res || null)
         });
     }, []);
 
@@ -208,6 +223,19 @@ export default function EventDetail() {
                     <div className="flex flex-wrap justify-center gap-6 mt-5 mb-10">
                         {activities.map((activity, index) => (
                             <ActivityCard key={index} dayName={getDayName(activity.date)} dayNum={activity.date.getDate()} time={activity.date.toLocaleTimeString() + " - " + activity.date.toLocaleDateString()} title={activity.title}/>
+                        ))}
+                    </div>
+
+                    {stands.length > 0 ?
+                        <>
+                            <h1 className="text-4xl text-gray-800 mt-10">stands</h1>
+                            <hr className="w-15 h-0.5 mx-auto bg-black border-0 rounded-sm md:my-1 dark:bg-black"/>
+                        </>
+                        : <></>
+                    }
+                    <div className="flex flex-wrap justify-center gap-6 mt-5 mb-10">
+                        {stands.map((stand, index) => (
+                            <Image key={index} src={stand.logo} alt="stand logo" width={100} height={66}></Image>
                         ))}
                     </div>
 

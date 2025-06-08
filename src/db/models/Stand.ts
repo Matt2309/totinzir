@@ -82,6 +82,31 @@ class Stand {
             throw new Error("Impossibile recuperare gli stand per l'utente specificato.");
         }
     }
+
+    public async getAllByEventId(eventId: number) {
+        try {
+            return prisma.stand.findMany({
+                where: {
+                    exhibitions: {
+                        some: {
+                            eventId: eventId,
+                        },
+                    },
+                },
+                include: {
+                    type: true,
+                    exhibitions: {
+                        where: {
+                            eventId: eventId,
+                        },
+                    },
+                },
+            });
+        } catch (error) {
+            console.error(`Errore nel recupero degli stand per l'evento ${eventId}:`, error);
+            throw new Error("Impossibile recuperare gli stand per l'evento specificato.");
+        }
+    }
 }
 
 const stand = new Stand();
