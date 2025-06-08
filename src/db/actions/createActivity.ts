@@ -5,6 +5,7 @@ import {
     CreateActivityFormState,
     CreateActivitySchema,
 } from "@/lib/definitions";
+import Activity from "@/db/models/Activity";
 
 export async function createActivity(state: CreateActivityFormState, formData: FormData) {
     let err = false;
@@ -13,7 +14,7 @@ export async function createActivity(state: CreateActivityFormState, formData: F
             title: formData.get('title') as string,
             time: formData.get('time') as number,
             date: formData.get('date') as string,
-            eventId: formData.get('eventId') as string,
+            eventId: formData.get('eventId') as number,
         }
 
         await CreateActivitySchema.validate({
@@ -23,7 +24,7 @@ export async function createActivity(state: CreateActivityFormState, formData: F
             eventId: params.eventId,
         }, { abortEarly: false });
 
-        
+        await Activity.add(params);
 
     }  catch (error: any) {
         err = true;
@@ -47,7 +48,7 @@ export async function createActivity(state: CreateActivityFormState, formData: F
         };
     } finally {
         if (!err) {
-            redirect('/dashboard/organizers');
+            redirect('/dashboard/activities');
         }
     }
 }

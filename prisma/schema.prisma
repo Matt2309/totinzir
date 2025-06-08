@@ -254,7 +254,7 @@ model Category {
 model Activity {
   id      Int      @id @default(autoincrement())
   date    DateTime
-  time    String
+  time    Int
   title   String
   event   Event    @relation(fields: [eventId], references: [id])
   eventId Int
