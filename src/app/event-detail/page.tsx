@@ -198,29 +198,49 @@ export default function EventDetail() {
                         }
                     </div>
 
-                    <h1 className="text-4xl text-gray-800 mt-10">attività</h1>
-                    <hr className="w-15 h-0.5 mx-auto bg-black border-0 rounded-sm md:my-1 dark:bg-black"/>
-
+                    {activities.length > 0 ?
+                        <>
+                            <h1 className="text-4xl text-gray-800 mt-10">attività</h1>
+                            <hr className="w-15 h-0.5 mx-auto bg-black border-0 rounded-sm md:my-1 dark:bg-black"/>
+                        </>
+                        : <></>
+                    }
                     <div className="flex flex-wrap justify-center gap-6 mt-5 mb-10">
                         {activities.map((activity, index) => (
                             <ActivityCard key={index} dayName={getDayName(activity.date)} dayNum={activity.date.getDate()} time={activity.date.toLocaleTimeString() + " - " + activity.date.toLocaleDateString()} title={activity.title}/>
                         ))}
                     </div>
 
-                    <h1 className="text-4xl text-gray-800 mt-10">sponsor</h1>
-                    <hr className="w-15 h-0.5 mx-auto bg-black border-0 rounded-sm md:my-1 dark:bg-black"/>
-                    <h1 className="text-2xl text-gray-800 mt-10">main</h1>
-                    <div className="flex flex-wrap justify-center gap-6 mt-5 mb-10">
-                        {sponsors.filter(s => s.type == "main").map((sponsor, index) => (
-                            <Image key={index} src={sponsor.logo} alt="header logo" width={100} height={66}></Image>
-                        ))}
-                    </div>
-                    <h1 className="text-2xl text-gray-800">silver</h1>
-                    <div className="flex flex-wrap justify-center gap-6 mt-5 mb-10">
-                        {sponsors.filter(s => s.type == "silver").map((sponsor, index) => (
-                            <Image key={index} src={sponsor.logo} alt="header logo" width={100} height={66}></Image>
-                        ))}
-                    </div>
+                    {sponsors.length > 0 ?
+                        <>
+                            <h1 className="text-4xl text-gray-800 mt-10">sponsor</h1>
+                            <hr className="w-15 h-0.5 mx-auto bg-black border-0 rounded-sm md:my-1 dark:bg-black"/>
+                        </>
+                        : <></>
+                    }
+                    {sponsors.filter(s => s.type == "main").length > 0 ?
+                        <>
+                            <h1 className="text-2xl text-gray-800 mt-10">main</h1>
+                            <div className="flex flex-wrap justify-center gap-6 mt-5 mb-10">
+                                {sponsors.filter(s => s.type == "main").map((sponsor, index) => (
+                                    <Image key={index} src={sponsor.logo} alt="header logo" width={100} height={66}></Image>
+                                ))}
+                            </div>
+                        </>
+                        : <></>
+                    }
+
+                    {sponsors.filter(s => s.type == "silver").length > 0 ?
+                        <>
+                            <h1 className="text-2xl text-gray-800 mt-10">silver</h1>
+                            <div className="flex flex-wrap justify-center gap-6 mt-5 mb-10">
+                                {sponsors.filter(s => s.type == "silver").map((sponsor, index) => (
+                                    <Image key={index} src={sponsor.logo} alt="header logo" width={100} height={66}></Image>
+                                ))}
+                            </div>
+                        </>
+                        : <></>
+                    }
 
                     <h1 className="text-4xl text-gray-800 mt-10">recensioni</h1>
                     <hr className="w-15 h-0.5 mx-auto bg-black border-0 rounded-sm md:my-1 dark:bg-black"/>
