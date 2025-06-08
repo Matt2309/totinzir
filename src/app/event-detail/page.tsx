@@ -11,6 +11,8 @@ import {getEventSponsorList} from "@/db/actions/getEventSponsorList";
 import {getActivitySponsorList} from "@/db/actions/getEventActivityList";
 import CircleTag from "@/components/CircleTag";
 import {AddReviewModal} from "@/components/AddReviewModal";
+import {getReviewList} from "@/db/actions/getReviewList";
+import ReviewCard from "@/components/ReviewCard";
 
 const fetchEvent = async (id): Promise<any> => {
     try {
@@ -38,12 +40,22 @@ const fetchActivity = async (id: number): Promise<any> => {
         return null;
     }
 };
+
+const fetchReviews = async (id: number): Promise<any> => {
+    try {
+        return await getReviewList(id);
+    } catch (error) {
+        console.error(`Errore nel recupero recensioni`, error);
+        return null;
+    }
+};
 export default function EventDetail() {
     const router = useRouter()
     const searchParams = useSearchParams()
     const [event, setEvent] = useState<any>(null);
     const [sponsors, setSponsors] = useState<any>([]);
     const [activities, setActivities] = useState<any>([]);
+    const [reviews, setReviews] = useState<any>([]);
 
     const [selectedTickets, setSelectedTickets] = useState({});
 
@@ -73,7 +85,15 @@ export default function EventDetail() {
         fetchActivity(parseInt(eventId.toString())).then(res => {
             setActivities(res || null)
         });
+
+        fetchReviews(parseInt(eventId.toString())).then(res => {
+            setReviews(res || null)
+        });
     }, []);
+
+    useEffect(() => {
+        console.log("Updated reviews state: ", reviews);
+    }, [reviews]); // This useEffect will run whenever 'reviews' changes
 
     const handleCheckout = () => {
         try {
@@ -159,7 +179,7 @@ export default function EventDetail() {
                                         price={ticket.price}
                                         minAge={ticket.minAge}
                                         maxAge={ticket.maxAge}
-                                        onQuantityChange={handleQuantityChange} // Pass the callback
+                                        onQuantityChange={handleQuantityChange}
                             />
                         ))}
                         {event.ticketTypes.length > 0 ?
@@ -178,7 +198,7 @@ export default function EventDetail() {
                     <h1 className="text-4xl text-gray-800 mt-10">attività</h1>
                     <hr className="w-15 h-0.5 mx-auto bg-black border-0 rounded-sm md:my-1 dark:bg-black"/>
 
-                    <div className="grid grid-cols-3 gap-x-25 gap-y-15 mt-5 mb-10">
+                    <div className="flex flex-wrap justify-center gap-6 mt-5 mb-10">
                         {activities.map((activity, index) => (
                             <ActivityCard key={index} dayName={getDayName(activity.date)} dayNum={activity.date.getDate()} time={activity.date.toLocaleTimeString() + " - " + activity.date.toLocaleDateString()} title={activity.title}/>
                         ))}
@@ -187,13 +207,13 @@ export default function EventDetail() {
                     <h1 className="text-4xl text-gray-800 mt-10">sponsor</h1>
                     <hr className="w-15 h-0.5 mx-auto bg-black border-0 rounded-sm md:my-1 dark:bg-black"/>
                     <h1 className="text-2xl text-gray-800 mt-10">main</h1>
-                    <div className="grid grid-cols-3 gap-x-25 gap-y-15 mt-5 mb-10">
+                    <div className="flex flex-wrap justify-center gap-6 mt-5 mb-10">
                         {sponsors.filter(s => s.type == "main").map((sponsor, index) => (
                             <Image key={index} src={sponsor.logo} alt="header logo" width={100} height={66}></Image>
                         ))}
                     </div>
                     <h1 className="text-2xl text-gray-800">silver</h1>
-                    <div className="grid grid-cols-3 gap-x-25 gap-y-15 mt-5 mb-10">
+                    <div className="flex flex-wrap justify-center gap-6 mt-5 mb-10">
                         {sponsors.filter(s => s.type == "silver").map((sponsor, index) => (
                             <Image key={index} src={sponsor.logo} alt="header logo" width={100} height={66}></Image>
                         ))}
@@ -203,6 +223,11 @@ export default function EventDetail() {
                     <hr className="w-15 h-0.5 mx-auto bg-black border-0 rounded-sm md:my-1 dark:bg-black"/>
                     <div className="flex justify-center mt-5">
                         <AddReviewModal eventId={event.id}/>
+                    </div>
+                    <div className="flex flex-wrap justify-center gap-6">
+                        {reviews.map((review, index) => (
+                            <ReviewCard key={index} title={review.title} desc={review.description} stars={review.stars} purchased={review.purchased} name={review.user.Registry.firstName}/>
+                        ))}
                     </div>
                 </div>
             </nav>

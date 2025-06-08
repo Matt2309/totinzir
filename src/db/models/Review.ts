@@ -36,9 +36,32 @@ class Review {
     }
 
     public async getAllByEventId(eventId: number) {
-        return prisma.review.findMany({
+        const reviews = await prisma.review.findMany({
             where: { eventId: eventId },
-            include: { user: true },
+            include: {
+                user: {
+                    include: {
+                        Registry: {
+                            take: 1,
+                        },
+                    },
+                },
+            },
+        });
+
+        return reviews.map(review => {
+            const user = review.user;
+            let singleRegistry: Registry | null = null;
+            if (user && Array.isArray(user.Registry) && user.Registry.length > 0) {
+                singleRegistry = user.Registry[0];
+            }
+            return {
+                ...review,
+                user: {
+                    ...user,
+                    Registry: singleRegistry as any,
+                },
+            };
         });
     }
 }
