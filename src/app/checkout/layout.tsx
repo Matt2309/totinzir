@@ -2,6 +2,7 @@
 import '@/app/globals.css';
 import {verifySession} from "@/lib/dal";
 import {redirect} from "next/navigation";
+import {UserProvider} from "@/context/UserContext";
 
 export default async function SpecialLayout({children}: { children: React.ReactNode }) {
     const session = await verifySession();
@@ -12,7 +13,9 @@ export default async function SpecialLayout({children}: { children: React.ReactN
     }
     return (
         <div className="bg-detail min-h-screen">
-            {children}
+            <UserProvider userId={user}>
+                {children}
+            </UserProvider>
         </div>
     );
 }

@@ -6,10 +6,21 @@ import React, {useActionState, useEffect, useRef, useState} from "react";
 import {useSearchParams} from "next/navigation";
 import {getEvent} from "@/db/actions/getEventById";
 import {purchaseTickets} from "@/db/actions/purchaseTickets";
+import {getUserPaymentMethods} from "@/db/actions/getUserPaymentMethods";
+import {useUser} from "@/context/UserContext";
 
 const fetchEvent = async (id): Promise<any> => {
     try {
         return await getEvent(id);
+    } catch (error) {
+        console.error(`Errore nel recupero eventi`, error);
+        return null;
+    }
+};
+
+const fetchPaymentMethod = async (id): Promise<any> => {
+    try {
+        return await getUserPaymentMethods(id);
     } catch (error) {
         console.error(`Errore nel recupero eventi`, error);
         return null;
@@ -21,6 +32,9 @@ export default function checkout() {
     const [selectedTickets, setSelectedTickets] = useState(null);
     const [total, setTotal] = useState(0);
     const [state, action, pending] = useActionState(purchaseTickets, undefined)
+    //disattiva bottone salva quando seleziono carte salvate
+    const [useSaved, setUseSaved] = useState(false)
+    const { userId } = useUser();
 
     /*handler per l'input data nascita*/
     const dayRef = useRef(null);
@@ -29,23 +43,22 @@ export default function checkout() {
 
     const handleDateChange = (e, nextFieldRef) => {
         const { value, maxLength } = e.target;
-
-        // Regex per rimuovere tutti i caratteri che NON sono numeri (0-9)
         const numericValue = value.replace(/\D/g, '');
-
-        // Aggiorna il valore dell'input per mostrare solo i numeri
         e.target.value = numericValue;
 
-        // Auto-tab al campo successivo se la lunghezza massima è raggiunta
         if (numericValue.length >= maxLength && nextFieldRef && nextFieldRef.current) {
             nextFieldRef.current.focus();
         }
     };
 
     /*handler per l'input carta*/
+    const [savedPaymentCards, setSavedPaymentCards] = useState([]);
     const [cardNumber, setCardNumber] = useState('');
+    const [expiryDate, setExpiryDate] = useState('');
+    const [cvv, setCvv] = useState('');
 
     const handleCardNumberChange = (e) => {
+        setUseSaved(false);
         const { value } = e.target;
         let formattedValue = value.replace(/\D/g, '');
         formattedValue = formattedValue.substring(0, 16);
@@ -54,6 +67,7 @@ export default function checkout() {
     };
 
     const formatExpiryDate = (e) => {
+        setUseSaved(false);
         let value = e.target.value.replace(/\D/g, '');
         let formattedValue = value;
 
@@ -64,11 +78,46 @@ export default function checkout() {
         e.target.value = formattedValue.substring(0, 5);
     };
 
-    const handleCvvChange = (e) => {
-        let value = e.target.value.replace(/\D/g, '');
-        e.target.value = value.substring(0, 3);
+    const handleExpiryDate = (e) => {
+        setExpiryDate(e.target.value.substring(0, 5));
     };
 
+    const handleCvvChange = (e) => {
+        setUseSaved(false);
+        let value = e.target.value.replace(/\D/g, '');
+        e.target.value = value.substring(0, 3);
+        setCvv(e.target.value);
+    };
+
+    const handleSavedCardChange = (e) => {
+        setUseSaved(true);
+        const selectedId = e.target.value;
+        const cardToFill = savedPaymentCards.find(card => card.id === parseInt(selectedId));
+        let formattedExpiry = '';
+        if (cardToFill.expiryDate instanceof Date) {
+            const month = (cardToFill.expiryDate.getMonth() + 1).toString().padStart(2, '0');
+            const year = cardToFill.expiryDate.getFullYear().toString().substring(2, 4);
+            formattedExpiry = `${month}/${year}`;
+        } else {
+            // Assume it's already in MM/YY or a string that can be directly used
+            formattedExpiry = cardToFill.expiryDate;
+        }
+
+        if (cardToFill) {
+            setCardNumber(cardToFill.cardNumber);
+            setExpiryDate(formattedExpiry);
+            setCvv(cardToFill.cvv);
+        } else {
+            setCardNumber('');
+            setExpiryDate('');
+            setCvv('');
+        }
+    };
+
+    useEffect(() => {
+        fetchPaymentMethod(parseInt(userId.toString())).then(res => {
+            setSavedPaymentCards(res || [])});
+    }, []);
 
     useEffect(() => {
         const data = searchParams.get('data');
@@ -216,6 +265,20 @@ export default function checkout() {
                         {/* Metodo di Pagamento */}
                         <div>
                             <h3 className="text-lg font-semibold mb-3">Dettagli Pagamento</h3>
+                            <div className="mb-4">
+                                <label htmlFor="savedCards" className="block mb-1 text-sm">Seleziona Carta Salvata</label>
+                                <select
+                                    id="savedCards"
+                                    name="savedCardId" // Added name for form submission if you want to send the ID
+                                    className="mb-2 w-full border-2 border-[light-dark(var(--button_blue),var(--button_blue))] rounded-md h-10 p-2 text-sm"
+                                    onChange={handleSavedCardChange}
+                                >
+                                    <option value="">-- Seleziona una carta salvata --</option>
+                                    {savedPaymentCards.map((card) => (
+                                        <option key={card.id} value={card.id}>{card.cardNumber}</option>
+                                    ))}
+                                </select>
+                            </div>
                             <label className="block mb-1 text-sm">Numero Carta</label>
                             <input
                                 className="mb-2 w-full border-2 border-[light-dark(var(--button_blue),var(--button_blue))] rounded-md h-10 p-2 text-sm"
@@ -236,8 +299,11 @@ export default function checkout() {
                                     type="text"
                                     name="expiryDate"
                                     placeholder="MM/AA"
-                                    maxLength="5" onKeyUp={formatExpiryDate}
+                                    maxLength="5"
+                                    onKeyUp={formatExpiryDate}
+                                    onChange={handleExpiryDate}
                                     inputMode="numeric"
+                                    value={expiryDate}
                                 />
                                 {state?.errors?.expiryDate && <p className="text-red-600 text-xs -mt-1">{state.errors.expiryDate}</p>}
                             </div>
@@ -251,14 +317,19 @@ export default function checkout() {
                                     maxLength="3"
                                     onChange={handleCvvChange}
                                     inputMode="numeric"
+                                    value={cvv}
                                 />
                                 {state?.errors?.cvv && <p className="text-red-600 text-xs -mt-1">{state.errors.cvv}</p>}
                             </div>
                         </div>
-                        <div className="flex items-end pb-1">
-                            <input className="mr-2 h-4 w-4 text-[light-dark(var(--button_blue),var(--button_blue))] border-[light-dark(var(--button_blue),var(--button_blue))] rounded" type="checkbox" name="savePayment" id="savePayment" value="true"/>
-                            <label htmlFor="savePayment" className="text-sm">Salva metodo di pagamento</label>
-                        </div>
+                        {!useSaved ?
+                            <div className="flex items-end pb-1">
+                                <input className="mr-2 h-4 w-4 text-[light-dark(var(--button_blue),var(--button_blue))] border-[light-dark(var(--button_blue),var(--button_blue))] rounded" type="checkbox" name="savePayment" id="savePayment" value="true"/>
+                                <label htmlFor="savePayment" className="text-sm">Salva metodo di pagamento</label>
+                            </div>
+                            : <></>
+                        }
+
 
                         {/* Submit */}
                         <div className="pt-4 mb-2">
