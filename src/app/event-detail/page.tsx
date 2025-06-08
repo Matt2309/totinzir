@@ -10,6 +10,7 @@ import HeaderMain from "@/components/Headers/HeaderMain";
 import {getEventSponsorList} from "@/db/actions/getEventSponsorList";
 import {getActivitySponsorList} from "@/db/actions/getEventActivityList";
 import CircleTag from "@/components/CircleTag";
+import {AddReviewModal} from "@/components/AddReviewModal";
 
 const fetchEvent = async (id): Promise<any> => {
     try {
@@ -196,6 +197,12 @@ export default function EventDetail() {
                         {sponsors.filter(s => s.type == "silver").map((sponsor, index) => (
                             <Image key={index} src={sponsor.logo} alt="header logo" width={100} height={66}></Image>
                         ))}
+                    </div>
+
+                    <h1 className="text-4xl text-gray-800 mt-10">recensioni</h1>
+                    <hr className="w-15 h-0.5 mx-auto bg-black border-0 rounded-sm md:my-1 dark:bg-black"/>
+                    <div className="flex justify-center mt-5">
+                        <AddReviewModal eventId={event.id}/>
                     </div>
                 </div>
             </nav>

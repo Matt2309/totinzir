@@ -303,6 +303,40 @@ export const CreateActivitySchema = yup.object().shape({
         .required('Inserisci un evento'),
 });
 
+export const CreateReviewSchema = yup.object().shape({
+    title: yup
+        .string()
+        .required('Il titolo è obbligatorio')
+        .min(3, 'Il titolo deve avere almeno 3 caratteri.')
+        .max(100, 'Il titolo non può superare i 100 caratteri.'),
+
+    description: yup
+        .string()
+        .required('La descrizione è obbligatoria')
+        .min(10, 'La descrizione deve avere almeno 10 caratteri.')
+        .max(500, 'La descrizione non può superare i 500 caratteri.'),
+
+    stars: yup
+        .number()
+        .typeError('Il voto deve essere un numero.')
+        .required('Il voto è obbligatorio.')
+        .integer('Le stelle devono essere un numero intero.')
+        .min(1, 'Il voto deve essere almeno 1 stella.')
+        .max(5, 'Il voto non può superare le 5 stelle.'),
+
+    purchased: yup
+        .boolean()
+        .optional()
+        .transform(value => (value === 'on' ? true : value === 'false' ? false : value))
+        .default(false),
+
+    eventId: yup
+        .number()
+        .nullable()
+        .optional()
+        .transform((value) => (isNaN(value) ? null : value)),
+});
+
 export type SigninFormState =
     | {
     errors?: {
@@ -444,6 +478,20 @@ export type CreateActivityFormState =
         time?: string[];
         date?: string[];
         eventId?: string[];
+        genericerror?: string[];
+    };
+    message?: string;
+}
+    | undefined;
+
+export type CreateReviewFormState =
+    | {
+    errors?: {
+        title?: string[];
+        description?: string[];
+        stars?: string[];
+        purchased?: string[];
+        eventId?: string[]; // Aggiungi eventId se lo validi
         genericerror?: string[];
     };
     message?: string;
