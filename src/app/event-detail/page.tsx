@@ -9,6 +9,7 @@ import {formatAMPM, getDayName} from "@/lib/utils";
 import HeaderMain from "@/components/Headers/HeaderMain";
 import {getEventSponsorList} from "@/db/actions/getEventSponsorList";
 import {getActivitySponsorList} from "@/db/actions/getEventActivityList";
+import CircleTag from "@/components/CircleTag";
 
 const fetchEvent = async (id): Promise<any> => {
     try {
@@ -102,8 +103,8 @@ export default function EventDetail() {
                     <h3 className="text-white text-2xl text-center">{event.organizer.companyName}</h3>
                 </div>
             </nav>
-            <nav className="bg-white p-10 pl-50 pr-50 flex justify-between">
-                <div className="flex gap-10">
+            <nav className="bg-white p-5 pl-50 pr-50 flex justify-between items-center">
+                <div className="flex gap-10 items-center">
                     <div>
                         <div className="flex align-middle gap-2">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" className="size-5">
@@ -123,8 +124,20 @@ export default function EventDetail() {
                         <br/>
                         <label>€5 - €10</label>
                     </div>
+                    <hr className="w-0.5 h-15 mx-auto bg-gray-500 border-0 rounded-sm md:my-1"/>
+                    <CircleTag text={event.category.title}></CircleTag>
+                    {(event.guideName || event.guideNumber) ?
+                        <div className="block">
+                            <label className="text-sm">CONTATTI GUIDA:</label>
+                            <br/>
+                            <label className="text-xl">{event.guideName ? event.guideName : ""} - {event.guideNumber ? event.guideNumber : ""}</label>
+                        </div>
+                        : <></>
+                    }
+
                 </div>
-                <button className="bg-[light-dark(var(--button_orange),var(--button_orange))] font-bold py-0.5 px-20 rounded-md text-white">
+
+                <button className="bg-[light-dark(var(--button_orange),var(--button_orange))] font-bold h-10 px-20 rounded-md text-white">
                     <a href="#tickets">
                         BIGLIETTI
                     </a>
