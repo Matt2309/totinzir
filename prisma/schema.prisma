@@ -210,7 +210,7 @@ model Stand {
 
 model StandType {
   id     Int     @id @default(autoincrement())
-  title  String
+  title  String  @unique
   size   String
   stands Stand[]
 }

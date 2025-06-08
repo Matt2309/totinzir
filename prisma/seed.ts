@@ -34,6 +34,31 @@ async function main() {
     for (const r of roles) {
         await prisma.role.create({ data: r });
     }
+
+    const standTypes = [
+        {
+            title: "doppio gazebo",
+            size: "6x3m",
+        },
+        {
+            title: "singolo gazebo",
+            size: "3x3m",
+        },
+    ];
+
+    for (const st of standTypes) {
+        await prisma.standType.upsert({
+            where: { title: st.title },
+            update: {
+                title: st.title,
+                size: st.size
+            },
+            create: {
+                title: st.title,
+                size: st.size
+            },
+        });
+    }
 }
 
 main()
