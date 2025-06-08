@@ -37,6 +37,6 @@ export default async function SpecialLayoutDashboard({ children }: { children: R
             </div>
         );
     }else {
-        redirect('/login')
+        redirect('/ticket-wallet')
     }
 }

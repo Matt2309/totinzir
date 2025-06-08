@@ -25,6 +25,25 @@ class Ticket{
         return { res: `Tickets added`}
     }
 
+    public async getUserTickets(id){
+        return prisma.ticket.findMany({
+            where: {
+                order: {
+                    Transaction: {
+                        userId: id,
+                    },
+                },
+            },
+            include: {
+                ticketType: {
+                    include: {
+                        event: true
+                    }
+                }
+            }
+        });
+    }
+
     public async getTotalRevenueUserId(id){
         let total = 0;
         const ticketTypes = await getTicketTypesByUser(id);
