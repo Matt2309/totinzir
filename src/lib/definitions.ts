@@ -374,6 +374,19 @@ export const CreateStandSchema = yup.object().shape({
         .positive('Seleziona un evento valido.'),
 });
 
+export const SubscribeNewsletterSchema = yup.object().shape({
+    email: yup
+        .string()
+        .email('Inserisci un\'email valida.')
+        .required('L\'email è obbligatoria.'),
+
+    eventId: yup
+        .number()
+        .required('Seleziona un evento')
+        .integer('L\'ID dell\'evento deve essere un numero intero.')
+        .positive('Seleziona un evento valido.'),
+});
+
 export type SigninFormState =
     | {
     errors?: {
@@ -543,6 +556,17 @@ export type CreateStandFormState =
         position?: string[];
         origin?: string[];
         typeId?: string[];
+        eventId?: string[];
+        genericerror?: string[];
+    };
+    message?: string;
+}
+    | undefined;
+
+export type SubscribeNewsletterFormState =
+    | {
+    errors?: {
+        email?: string[];
         eventId?: string[];
         genericerror?: string[];
     };

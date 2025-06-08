@@ -15,6 +15,7 @@ import {getReviewList} from "@/db/actions/getReviewList";
 import ReviewCard from "@/components/ReviewCard";
 import {useUser} from "@/context/UserContext";
 import {getStandByEvent} from "@/db/actions/getStandByEvent";
+import {AddNewsletterModal} from "@/components/AddNewsLetterModal";
 
 const fetchEvent = async (id): Promise<any> => {
     try {
@@ -176,11 +177,7 @@ export default function EventDetail() {
 
                 </div>
 
-                <button className="bg-[light-dark(var(--button_orange),var(--button_orange))] font-bold h-10 px-20 rounded-md text-white">
-                    <a href="#tickets">
-                        BIGLIETTI
-                    </a>
-                </button>
+                <AddNewsletterModal eventId={event.id}/>
             </nav>
             <nav className="p-10 pl-50 pr-50">
                 <h1 className="text-3xl text-gray-800">DESCRIZIONE EVENTO</h1>
