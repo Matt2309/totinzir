@@ -8,6 +8,7 @@ import {useSearchParams, useRouter} from "next/navigation";
 import {formatAMPM, getDayName} from "@/lib/utils";
 import HeaderMain from "@/components/Headers/HeaderMain";
 import {getEventSponsorList} from "@/db/actions/getEventSponsorList";
+import {getActivitySponsorList} from "@/db/actions/getEventActivityList";
 
 const fetchEvent = async (id): Promise<any> => {
     try {
@@ -19,7 +20,6 @@ const fetchEvent = async (id): Promise<any> => {
         return null;
     }
 };
-
 const fetchSponsor = async (id): Promise<any> => {
     try {
         return await getEventSponsorList(id);
@@ -28,11 +28,20 @@ const fetchSponsor = async (id): Promise<any> => {
         return null;
     }
 };
+const fetchActivity = async (id: number): Promise<any> => {
+    try {
+        return await getActivitySponsorList(id);
+    } catch (error) {
+        console.error(`Errore nel recupero attività`, error);
+        return null;
+    }
+};
 export default function EventDetail() {
     const router = useRouter()
     const searchParams = useSearchParams()
     const [event, setEvent] = useState<any>(null);
     const [sponsors, setSponsors] = useState<any>([]);
+    const [activities, setActivities] = useState<any>([]);
 
     const [selectedTickets, setSelectedTickets] = useState({});
 
@@ -57,7 +66,10 @@ export default function EventDetail() {
 
         fetchSponsor(eventId).then(res => {
             setSponsors(res || null)
-            console.log("sponsors: ", res)
+        });
+
+        fetchActivity(parseInt(eventId.toString())).then(res => {
+            setActivities(res || null)
         });
     }, []);
 
@@ -153,9 +165,9 @@ export default function EventDetail() {
                     <hr className="w-15 h-0.5 mx-auto bg-black border-0 rounded-sm md:my-1 dark:bg-black"/>
 
                     <div className="grid grid-cols-3 gap-x-25 gap-y-15 mt-5 mb-10">
-                        <ActivityCard dayName={'GIO'} dayNum={10} time={'7:00pm'} title={'nullafacismo'}/>
-                        <ActivityCard dayName={'GIO'} dayNum={10} time={'7:00pm'} title={'nullafacismo'}/>
-                        <ActivityCard dayName={'GIO'} dayNum={10} time={'7:00pm'} title={'nullafacismo'}/>
+                        {activities.map((activity, index) => (
+                            <ActivityCard key={index} dayName={getDayName(activity.date)} dayNum={activity.date.getDate()} time={activity.date.toLocaleTimeString() + " - " + activity.date.toLocaleDateString()} title={activity.title}/>
+                        ))}
                     </div>
 
                     <h1 className="text-4xl text-gray-800 mt-10">sponsor</h1>
