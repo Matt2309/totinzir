@@ -337,6 +337,43 @@ export const CreateReviewSchema = yup.object().shape({
         .transform((value) => (isNaN(value) ? null : value)),
 });
 
+export const CreateStandSchema = yup.object().shape({
+    name: yup
+        .string()
+        .required('Il nome dello stand è obbligatorio')
+        .min(3, 'Il nome deve avere almeno 3 caratteri.')
+        .max(100, 'Il nome non può superare i 100 caratteri.'),
+
+    logo: yup
+        .string()
+        .url('L\'URL del logo non è valido.')
+        .required('L\'URL del logo è obbligatorio.'),
+
+    position: yup
+        .string()
+        .required('La posizione è obbligatoria')
+        .max(100, 'La posizione non può superare i 100 caratteri.'),
+
+    origin: yup
+        .string()
+        .required('L\'origine è obbligatoria')
+        .max(50, 'L\'origine non può superare i 50 caratteri.'),
+
+    typeId: yup
+        .number()
+        .typeError('Seleziona un tipo di stand.')
+        .required('Il tipo di stand è obbligatorio.')
+        .integer('Il tipo di stand deve essere un numero intero.')
+        .positive('Seleziona un tipo di stand valido.'),
+
+    eventId: yup
+        .number()
+        .required("Evento obbligatorio")
+        .typeError('Evento obbligatorio')
+        .integer('L\'ID dell\'evento deve essere un numero intero.')
+        .positive('Seleziona un evento valido.'),
+});
+
 export type SigninFormState =
     | {
     errors?: {
@@ -492,6 +529,21 @@ export type CreateReviewFormState =
         stars?: string[];
         purchased?: string[];
         eventId?: string[]; // Aggiungi eventId se lo validi
+        genericerror?: string[];
+    };
+    message?: string;
+}
+    | undefined;
+
+export type CreateStandFormState =
+    | {
+    errors?: {
+        name?: string[];
+        logo?: string[];
+        position?: string[];
+        origin?: string[];
+        typeId?: string[];
+        eventId?: string[];
         genericerror?: string[];
     };
     message?: string;
