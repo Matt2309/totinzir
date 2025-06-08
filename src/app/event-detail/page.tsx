@@ -13,6 +13,7 @@ import CircleTag from "@/components/CircleTag";
 import {AddReviewModal} from "@/components/AddReviewModal";
 import {getReviewList} from "@/db/actions/getReviewList";
 import ReviewCard from "@/components/ReviewCard";
+import {useUser} from "@/context/UserContext";
 
 const fetchEvent = async (id): Promise<any> => {
     try {
@@ -58,6 +59,8 @@ export default function EventDetail() {
     const [reviews, setReviews] = useState<any>([]);
 
     const [selectedTickets, setSelectedTickets] = useState({});
+    const { userId } = useUser();
+
 
     const handleQuantityChange = useCallback((ticketId, title, quantity, price) => {
         setSelectedTickets(prevSelectedTickets => {
@@ -222,7 +225,7 @@ export default function EventDetail() {
                     <h1 className="text-4xl text-gray-800 mt-10">recensioni</h1>
                     <hr className="w-15 h-0.5 mx-auto bg-black border-0 rounded-sm md:my-1 dark:bg-black"/>
                     <div className="flex justify-center mt-5">
-                        <AddReviewModal eventId={event.id}/>
+                        {userId? <AddReviewModal eventId={event.id}/> : <></>}
                     </div>
                     <div className="flex flex-wrap justify-center gap-6">
                         {reviews.map((review, index) => (
