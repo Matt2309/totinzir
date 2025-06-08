@@ -1,11 +1,12 @@
 'use client'
 import React, {useEffect, useState} from "react";
-import {getOrganizerList} from "@/db/actions/getOrganizersList";
 import {CreateActivityModal} from "@/components/CreateActivityModal";
+import {useUser} from "@/context/UserContext";
+import {getActivityList} from "@/db/actions/getActivityList";
 
-const fetchOrganizer = async (): Promise<any> => {
+const fetchActivities = async (userId: number): Promise<any> => {
     try {
-        return getOrganizerList();
+        return getActivityList(userId);
     } catch (error) {
         console.error(`Errore nel recupero eventi`, error);
         return [];
@@ -13,11 +14,12 @@ const fetchOrganizer = async (): Promise<any> => {
 };
 
 export default function Events() {
-    const [organizerList, setOrganizerList] = useState([]);
+    const [activityList, setActivityList] = useState([]);
+    const { userId } = useUser();
+
     useEffect(() => {
-        fetchOrganizer().then(res => {
-            console.log(res);
-            setOrganizerList(res || [])});
+        fetchActivities(parseInt(userId.toString())).then(res => {
+            setActivityList(res || [])});
     }, []);
   return (
     <div>
@@ -54,19 +56,19 @@ export default function Events() {
                         </tr>
                         </thead>
                         <tbody>
-                        {organizerList.map((organizer, index) => (
+                        {activityList.map((activity, index) => (
                             <tr className="hover:bg-slate-50 border-b border-slate-200" key={index}>
                                 <td className="p-4 py-5">
-                                    <p className="block font-semibold text-sm text-slate-800">{organizer.companyName}</p>
+                                    <p className="block font-semibold text-sm text-slate-800">{activity.title}</p>
                                 </td>
                                 <td className="p-4 py-5">
-                                    <p className="text-sm text-slate-500">{organizer.vatNumber}</p>
+                                    <p className="text-sm text-slate-500">{activity.time}</p>
                                 </td>
                                 <td className="p-4 py-5">
-                                    <p className="text-sm text-slate-500">{organizer.user["email"]}</p>
+                                    <p className="text-sm text-slate-500">{activity.date.toLocaleDateString()}</p>
                                 </td>
                                 <td className="p-4 py-5">
-                                    <p className="text-sm text-slate-500">{organizer.user["email"]}</p>
+                                    <p className="text-sm text-slate-500">{activity.event.title}</p>
                                 </td>
                             </tr>
                         ))}
