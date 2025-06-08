@@ -284,6 +284,25 @@ export const CreateSponsorSchema = yup.object().shape({
         .required('Il campo eventi è obbligatorio'),
 });
 
+export const CreateActivitySchema = yup.object().shape({
+    title: yup
+        .string()
+        .required('Inserisci un nome valido'),
+    time: yup
+        .number()
+        .required('Inserisci un cognome valido'),
+
+    date: yup
+        .date()
+        .min(new Date(Date.now()))
+        .typeError('Inserisci una data valida')
+        .required('La data di nascita è obbligatoria'),
+
+    eventId: yup
+        .number()
+        .required('Inserisci un evento'),
+});
+
 export type SigninFormState =
     | {
     errors?: {
@@ -412,6 +431,19 @@ export type SponsorFormState =
         budget?: string[];
         image?: number[];
         events?: string[];
+        genericerror?: string[];
+    };
+    message?: string;
+}
+    | undefined;
+
+export type CreateActivityFormState =
+    | {
+    errors?: {
+        title?: string[];
+        time?: string[];
+        date?: string[];
+        eventId?: string[];
         genericerror?: string[];
     };
     message?: string;
