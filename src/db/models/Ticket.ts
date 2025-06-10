@@ -1,9 +1,9 @@
 import {prisma} from '@/lib/prisma'
 import {getTicketTypesByUser} from "@/db/actions/getTicketTypesByUser";
 
-class Ticket{
+class Ticket {
     public async add(params) {
-        for (let i = 0; i<params.quantity; i++) {
+        for (let i = 0; i < params.quantity; i++) {
             await prisma.ticket.create({
                 data: {
                     firstName: params.firstName,
@@ -22,10 +22,10 @@ class Ticket{
                 }
             })
         }
-        return { res: `Tickets added`}
+        return {res: `Tickets added`}
     }
 
-    public async getUserTickets(id){
+    public async getUserTickets(id) {
         return prisma.ticket.findMany({
             where: {
                 order: {
@@ -44,19 +44,24 @@ class Ticket{
         });
     }
 
-    public async getTotalRevenueUserId(id){
-        let total = 0;
-        const ticketTypes = await getTicketTypesByUser(id);
-        for (const tt of ticketTypes) {
-            const tickets = await prisma.ticket.findMany({
-                where: {
-                    ticketTypeId: tt.id
-                }
-            });
-            total += tickets.length * tt.price;
-        }
-        return total;
+    public async getTotalRevenueByUserId(userId: number){
+        const result = await prisma.$queryRaw<{ totalRevenue: number }[]>`
+            SELECT
+                SUM(TT.price) AS "totalRevenue"
+            FROM
+                "public"."User" AS U
+                    JOIN
+                "public"."Organizer" AS O ON U.id = O."userId"
+                    JOIN
+                "public"."TicketType" AS TT ON O.id = TT."organizerId"
+                    JOIN
+                "public"."Ticket" AS T ON TT.id = T."ticketTypeId"
+            WHERE
+                U.id = ${userId};
+            `;
+            return result[0]?.totalRevenue ?? 0;
     }
+
 }
 
 const ticket = new Ticket();
