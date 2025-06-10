@@ -61,7 +61,23 @@ class Ticket {
             `;
             return result[0]?.totalRevenue ?? 0;
     }
-
+    public async getTotalSold(userId: number){
+        const result = await prisma.$queryRaw<{ totalTickets: number }[]>`
+            SELECT
+                COUNT(TT.id) AS "totalTickets"
+            FROM
+                "public"."User" AS U
+                    JOIN
+                "public"."Organizer" AS O ON U.id = O."userId"
+                    JOIN
+                "public"."TicketType" AS TT ON O.id = TT."organizerId"
+                    JOIN
+                "public"."Ticket" AS T ON TT.id = T."ticketTypeId"
+            WHERE
+                U.id = ${userId};
+            `;
+        return result[0]?.totalTickets ?? 0;
+    }
 }
 
 const ticket = new Ticket();

@@ -214,6 +214,24 @@ class Event {
             },
         });
     }
+
+    public async getTotalRevenueByUserId(userId: number){
+        const result = await prisma.$queryRaw<{ totalRevenue: number }[]>`
+            SELECT
+                COALESCE(SUM(TT.price), 0) + COALESCE(SUM(S.budget), 0) AS "totalRevenue"
+            FROM
+                "public"."User" AS U
+                    JOIN "public"."Organizer" AS O ON U.id = O."userId"
+                    LEFT JOIN "public"."TicketType" AS TT ON O.id = TT."organizerId"
+                    LEFT JOIN "public"."Ticket" AS T ON TT.id = T."ticketTypeId"
+                    LEFT JOIN "public"."Event" AS E ON O.id = E."organizerId"
+                    LEFT JOIN "public"."Sponsorship" AS SP ON E.id = SP."eventId"
+                    LEFT JOIN "public"."Sponsor" AS S ON SP."sponsorId" = S.id
+            WHERE
+                U.id = ${userId};
+        `;
+        return result[0]?.totalRevenue ?? 0;
+    }
 }
 
 const event = new Event();

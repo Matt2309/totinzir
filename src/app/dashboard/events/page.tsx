@@ -4,7 +4,7 @@ import React, {useEffect, useState} from "react";
 import {CreateEventModal} from "@/components/CreateEventModal";
 import {getAllOrganizerEvents} from "@/db/actions/getAllOrganizerEvents";
 import {useUser} from "@/context/UserContext";
-import {getTotalTicketsSoldByUser} from "@/db/actions/stats";
+import {getTotalIncomeByUser, getTotalTicketIncomeByUser} from "@/db/actions/stats";
 import {deleteEventById} from "@/db/actions/deleteEvent";
 
 const fetchEvent = async (id): Promise<any> => {
@@ -18,7 +18,7 @@ const fetchEvent = async (id): Promise<any> => {
 
 const fetchTotalRevenue = async (id): Promise<any> => {
     try {
-        return getTotalTicketsSoldByUser(id);
+        return getTotalIncomeByUser(id);
     } catch (error) {
         console.error(`Errore nel recupero eventi`, error);
         return [];

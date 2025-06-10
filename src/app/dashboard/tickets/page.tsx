@@ -5,6 +5,7 @@ import React, {useEffect, useState} from "react";
 import {CreateTicketTypeModal} from "@/components/CreateTicketTypeModal";
 import {getTicketTypesByUser} from "@/db/actions/getTicketTypesByUser";
 import {useUser} from "@/context/UserContext";
+import {getTotalIncomeByUser, getTotalTicketIncomeByUser, getTotalTicketsSoldByUser} from "@/db/actions/stats";
 
 const fetchTypes = async (id): Promise<any> => {
     try {
@@ -15,14 +16,41 @@ const fetchTypes = async (id): Promise<any> => {
     }
 };
 
+const fetchTotalSold = async (id): Promise<any> => {
+    try {
+        return getTotalTicketsSoldByUser(id);
+    } catch (error) {
+        console.error(`Errore nel recupero ticket`, error);
+        return [];
+    }
+};
+
+const fetchTotalRevenue = async (id): Promise<any> => {
+    try {
+        return getTotalTicketIncomeByUser(id);
+    } catch (error) {
+        console.error(`Errore nel recupero eventi`, error);
+        return [];
+    }
+};
+
 export default function Tickets() {
     const [ticketList, setTicketList] = useState([]);
+    const [totalSold, setTotalSold] = useState(0);
+    const [totalRev, setTotalRev] = useState(0);
+
     const { userId } = useUser();
 
     useEffect(() => {
         fetchTypes(userId).then(res => {
             console.log(res);
             setTicketList(res || [])});
+
+        fetchTotalSold(userId).then(res => {
+            setTotalSold(res || 0)});
+
+        fetchTotalRevenue(userId).then(res => {
+            setTotalRev(res || 0)});
     }, []);
 
   return (
@@ -33,8 +61,8 @@ export default function Tickets() {
                 <CreateTicketTypeModal/>
             </div>
             <div className="flex flex-row gap-10 mt-5">
-                <AnalyticsCard title={"Biglietti totali"} value={"1.000"} color={"--button_blue"}/>
-                <AnalyticsCard title={"Incasso totale"} value={"€ 230000"} color={"--button_orange"}/>
+                <AnalyticsCard title={"Biglietti totali"} value={totalSold.toString()} color={"--button_blue"}/>
+                <AnalyticsCard title={"Incasso totale"} value={`€${totalRev}`} color={"--button_orange"}/>
             </div>
 
             <div className="flex flex-row gap-10 mt-5">
