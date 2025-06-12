@@ -387,6 +387,35 @@ export const SubscribeNewsletterSchema = yup.object().shape({
         .positive('Seleziona un evento valido.'),
 });
 
+export const CreateDiscountCodeSchema = yup.object().shape({
+    code: yup
+        .string()
+        .required('Il codice sconto è obbligatorio.')
+        .min(3, 'Il codice deve avere almeno 3 caratteri.')
+        .max(20, 'Il codice non può superare i 20 caratteri.')
+        .matches(/^[A-Z0-9]+$/, 'Il codice può contenere solo lettere maiuscole e numeri.'),
+
+    name: yup
+        .string()
+        .required('Il nome del codice sconto è obbligatorio.')
+        .min(3, 'Il nome deve avere almeno 3 caratteri.')
+        .max(100, 'Il nome non può superare i 100 caratteri.'),
+
+    discountPerc: yup
+        .number()
+        .typeError('La percentuale di sconto deve essere un numero.')
+        .required('La percentuale di sconto è obbligatoria.')
+        .min(0, 'La percentuale non può essere inferiore a 0.')
+        .max(1, 'La percentuale non può superare 1 (100%).'),
+
+    eventId: yup
+        .number()
+        .typeError('Seleziona un evento valido.')
+        .required('L\'evento è obbligatorio.')
+        .integer('L\'ID dell\'evento deve essere un numero intero.')
+        .positive('Seleziona un evento valido.'),
+});
+
 export type SigninFormState =
     | {
     errors?: {
@@ -567,6 +596,19 @@ export type SubscribeNewsletterFormState =
     | {
     errors?: {
         email?: string[];
+        eventId?: string[];
+        genericerror?: string[];
+    };
+    message?: string;
+}
+    | undefined;
+
+export type CreateDiscountCodeFormState =
+    | {
+    errors?: {
+        code?: string[];
+        name?: string[];
+        discountPerc?: string[];
         eventId?: string[];
         genericerror?: string[];
     };
