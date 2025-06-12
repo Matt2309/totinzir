@@ -46,6 +46,25 @@ class DiscountCode {
             include: { event: true },
         });
     }
+
+    public async getAllByUserId(id: number){
+        const organizer = await prisma.organizer.findUnique({
+            where: { userId: id },
+        });
+        if (!organizer) return [];
+        return prisma.discountCode.findMany({
+            where: {
+                event: {
+                    organizer: {
+                        userId: id,
+                    },
+                },
+            },
+            include: {
+                event: true,
+            }
+        });
+    }
 }
 
 const discountCode = new DiscountCode();

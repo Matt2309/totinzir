@@ -2,12 +2,12 @@
 
 import React, {useEffect, useState} from "react";
 import {useUser} from "@/context/UserContext";
-import {getStandByUID} from "@/db/actions/getStandByUID";
 import {CreateDiscountCodeModal} from "@/components/CreateDiscountCodeModal";
+import {getDiscountList} from "@/db/actions/getDiscountList";
 
 const fetchDiscountCodes = async (id): Promise<any> => {
     try {
-        return getStandByUID(id);
+        return getDiscountList(id);
     } catch (error) {
         console.error(`Errore nel recupero stands`, error);
         return [];
@@ -15,20 +15,14 @@ const fetchDiscountCodes = async (id): Promise<any> => {
 };
 
 export default function DiscountCodes() {
-    const [standList, setStandList] = useState([]);
+    const [discountList, setDiscountList] = useState([]);
     const { userId } = useUser();
 
     useEffect(() => {
         fetchDiscountCodes(userId).then(res => {
-            setStandList(res || [])});
-        console.log("res",standList)
+            setDiscountList(res || [])});
     }, []);
-
-    useEffect(() => {
-        console.log("res",standList)
-    }, [standList]);
-
-    if (!standList) return <p>Caricamento stand...</p>
+    if (!discountList) return <p>Caricamento stand...</p>
   return (
     <div>
         <main>
@@ -65,19 +59,19 @@ export default function DiscountCodes() {
                         </tr>
                         </thead>
                         <tbody>
-                        {standList.map((stand, index) => (
+                        {discountList.map((discount, index) => (
                             <tr className="hover:bg-slate-50 border-b border-slate-200" key={index}>
                                 <td className="p-4 py-5">
-                                    <p className="block font-semibold text-sm text-slate-800">{stand.name}</p>
+                                    <p className="block font-semibold text-sm text-slate-800">{discount.code}</p>
                                 </td>
                                 <td className="p-4 py-5">
-                                    <p className="text-sm text-slate-500">{stand.position}</p>
+                                    <p className="text-sm text-slate-500">{discount.name}</p>
                                 </td>
                                 <td className="p-4 py-5">
-                                    <p className="text-sm text-slate-500">{stand.exhibitions[0].event.title}</p>
+                                    <p className="text-sm text-slate-500">{discount.discountPerc*100}%</p>
                                 </td>
                                 <td className="p-4 py-5">
-                                    <p className="text-sm text-slate-500">{stand.origin}</p>
+                                    <p className="text-sm text-slate-500">{discount.event.title}</p>
                                 </td>
                             </tr>
                         ))}
