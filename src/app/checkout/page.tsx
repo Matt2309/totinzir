@@ -8,6 +8,7 @@ import {getEvent} from "@/db/actions/getEventById";
 import {purchaseTickets} from "@/db/actions/purchaseTickets";
 import {getUserPaymentMethods} from "@/db/actions/getUserPaymentMethods";
 import {useUser} from "@/context/UserContext";
+import { checkDiscountCode as apiCheckDiscountCode } from "@/db/actions/checkDiscountCode";
 
 const fetchEvent = async (id): Promise<any> => {
     try {
@@ -27,6 +28,16 @@ const fetchPaymentMethod = async (id): Promise<any> => {
     }
 };
 
+const checkDiscountCode = async (code): Promise<any> => {
+    try {
+        return await apiCheckDiscountCode(code);
+    } catch (error) {
+        console.error(`Errore nel recupero codice sconto`, error);
+        return null;
+    }
+};
+
+
 export default function checkout() {
     const searchParams = useSearchParams();
     const [selectedTickets, setSelectedTickets] = useState(null);
@@ -35,6 +46,27 @@ export default function checkout() {
     //disattiva bottone salva quando seleziono carte salvate
     const [useSaved, setUseSaved] = useState(false)
     const { userId } = useUser();
+
+    const [discountCode, setDiscountCode] = useState('');
+    const [isValidDiscount, setIsValidDiscount] = useState('pending');
+    const handleInputChange = (event) => {
+        setDiscountCode(event.target.value);
+    };
+
+    const handleDiscountCode = async () => {
+        try {
+            const result = await checkDiscountCode(discountCode);
+            if (result) {
+                setIsValidDiscount("true");
+                setTotal(total-(total*result))
+            } else {
+                setIsValidDiscount("false");
+            }
+            console.log("Discount Code Validation Result: ", result);
+        } catch (error) {
+            console.error(`Errore nella verifica del codice sconto`, error);
+        }
+    };
 
     /*handler per l'input data nascita*/
     const dayRef = useRef(null);
@@ -355,6 +387,21 @@ export default function checkout() {
                         <h1 className="text-xl text-gray-700">totale</h1>
                         <label className="text-lg">€{(total + 2).toFixed(2)}</label>
                     </div>
+                    <div className="mt-5">
+                        <label className="block mb-1 text-sm">Codice sconto</label>
+                        <div className="flex flex-row gap-2 items-center">
+                            <input className="w-full border-2 bg-white border-[light-dark(var(--button_blue),var(--button_blue))] rounded-md h-10 p-2 text-sm"
+                                   type="text"
+                                   name="discountCode"
+                                   placeholder="CODICE02"
+                                   onChange={handleInputChange}
+                            />
+                            <button onClick={handleDiscountCode} className="bg-[light-dark(var(--button_blue),var(--button_blue))] font-bold px-3 py-2 rounded-md text-white text-sm">
+                                VALIDA
+                            </button>
+                        </div>
+                    </div>
+                    <p className="text-[light-dark(var(--button_blue),var(--button_blue))]">{isValidDiscount === "pending" ? "" : ( isValidDiscount == "true" ? "Sconto applicato!" : "Codice non valido")}</p>
                 </div>
             </div>
         </main>
