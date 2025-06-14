@@ -67,6 +67,21 @@ class User {
         })
     }
 
+    public async downgradeRoleToVisitor(email: string) {
+        return prisma.user.update({
+            where: {
+                email: email,
+            },
+            data: {
+                role: {
+                    connect: {
+                        title: 'visitor'
+                    }
+                },
+            },
+        })
+    }
+
 }
 
 const user = new User();
